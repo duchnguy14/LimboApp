@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "43815278134",
+    "firebase_url": "https://limbo-4a265.firebaseio.com",
+    "project_id": "limbo-4a265",
+    "storage_bucket": "limbo-4a265.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:43815278134:android:d5081e9fae8f82dc12ea97",
+        "android_client_info": {
+          "package_name": "com.example.limboapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "43815278134-gpbrs5pi8qhnq8ioff8ulufria96uul0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuU3vmiCRoAOWzRWzPgQe39WZtx2dFoKU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "43815278134-gpbrs5pi8qhnq8ioff8ulufria96uul0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

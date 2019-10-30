@@ -134,7 +134,7 @@
     <EditText
         android:id="@+id/username_editText"
         android:layout_width="275dp"
-        android:layout_height="35dp"
+        android:layout_height="45dp"
         android:background="@color/colorPrimaryDark"
         android:ems="10"
         android:fontFamily="@font/acme"
@@ -175,7 +175,7 @@
     <EditText
         android:id="@+id/password_editText"
         android:layout_width="275dp"
-        android:layout_height="35dp"
+        android:layout_height="45dp"
         android:background="@color/colorPrimaryDark"
         android:ems="10"
         android:fontFamily="@font/acme"
@@ -210,8 +210,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5625"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_begin="422dp"
+        app:layout_constraintGuide_percent="0.5625" />
 
     <TextView
         android:id="@+id/forgot_info_textView"
@@ -244,5 +244,19 @@
         app:layout_constraintStart_toStartOf="@id/v_guideline_25"
         app:layout_constraintTop_toBottomOf="@id/forgot_info_textView"
         app:layout_constraintVertical_bias="0.481" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@id/log_in_button"
+        app:layout_constraintEnd_toStartOf="@+id/forgot_info_textView"
+        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintStart_toStartOf="@+id/log_in_button"
+        app:layout_constraintTop_toTopOf="@+id/h_guideline_56_25"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/limbo_giraffe" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
