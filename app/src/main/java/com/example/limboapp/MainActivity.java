@@ -1,5 +1,6 @@
 package com.example.limboapp;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -65,5 +66,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
