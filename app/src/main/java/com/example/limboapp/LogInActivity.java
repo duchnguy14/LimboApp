@@ -22,7 +22,7 @@ public class LogInActivity extends AppCompatActivity {
     {
         // The way to move from one activity to the next is to use "intent"
         // Only makes an intent, not executing it.
-        intent = new Intent(getApplicationContext(), ForgotInfoActivity.class);
+        intent = new Intent(LogInActivity.this, ForgotInfoActivity.class);
 
         // Execute intent
         startActivity(intent);
@@ -30,22 +30,15 @@ public class LogInActivity extends AppCompatActivity {
 
     public void goToSignUp(View view)
     {
-        // The way to move from one activity to the next is to use "intent"
-        // Only makes an intent, not executing it.
-        intent = new Intent(getApplicationContext(), SignUpActivity.class);
-
-        // Execute intent
+        intent = new Intent(LogInActivity.this, SignUpActivity.class);
         startActivity(intent);
     }
 
 
     public void goToMain(View view)
     {
-        // The way to move from one activity to the next is to use "intent"
-        // Only makes an intent, not executing it.
-        intent = new Intent(getApplicationContext(), MainActivity.class);
 
-        // Execute intent
+        intent = new Intent(LogInActivity.this, MainActivity.class);
         startActivity(intent);
     }
 

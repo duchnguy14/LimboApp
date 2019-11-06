@@ -71,17 +71,6 @@
         app:layout_constraintGuide_begin="20dp"
         app:layout_constraintGuide_percent="0.75"/>
 
-    <VideoView
-        android:id="@+id/videoView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/h_guideline_65"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/h_guideline_5"
-        app:layout_constraintVertical_bias="0.0" />
-
     <LinearLayout
         android:id="@+id/hor_data_linearLayout"
         android:layout_width="match_parent"
@@ -128,5 +117,16 @@
             android:gravity="center|left"
             android:text="Username" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/video_imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/h_guideline_65"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/h_guideline_5"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/limbo_giraffe" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

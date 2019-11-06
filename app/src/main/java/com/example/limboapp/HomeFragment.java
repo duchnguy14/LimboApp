@@ -11,9 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.limboapp.dummy.DummyContent;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -57,8 +60,31 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home_list, container, false);
+                             Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.custom_row, container, false);
+
+        //Duck's
+
+        ArrayList<Users> usersList = new ArrayList<Users>();
+
+        Users user1 = new Users("fiends3175");
+        Users user2 = new Users("Betsy");
+        Users user3 = new Users("Tonykyo");
+        Users user4 = new Users("WkeClutch");
+        Users user5 = new Users("Duwabu");
+
+        usersList.add(user1);
+        usersList.add(user2);
+        usersList.add(user3);
+        usersList.add(user4);
+        usersList.add(user5);
+
+//        ListView news_feed_ListView = (ListView) findViewById(R.id.news_feed_listView);
+//
+//        CustomAdapter adapter = new CustomAdapter(MainActivity.this, R.layout.custom_row, usersList);
+//
+//        news_feed_ListView.setAdapter(adapter);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
