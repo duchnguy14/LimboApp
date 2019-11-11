@@ -1,6 +1,9 @@
 package com.example.limboapp;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,6 +13,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity
@@ -17,6 +22,9 @@ public class MainActivity extends AppCompatActivity
         HomeFragment.OnListFragmentInteractionListener,
         RecordFragment.OnFragmentInteractionListener,
         UserFragment.OnListFragmentInteractionListener {
+        Context context;
+    private static final int MY_CAMERA_REQUEST_CODE = 100;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +34,9 @@ public class MainActivity extends AppCompatActivity
         navigation.setOnNavigationItemSelectedListener(this);
 
         loadFragment(new HomeFragment());
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        }
     }
 
     //checks if given fragment exists, and loads it if possible

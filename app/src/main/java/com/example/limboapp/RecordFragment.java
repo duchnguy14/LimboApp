@@ -1,6 +1,7 @@
 package com.example.limboapp;
 
 import android.content.Context;
+import android.icu.util.ValueIterator;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.VideoView;
 
 
 /**
@@ -22,9 +24,11 @@ import android.view.ViewGroup;
 public class RecordFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-
+    private VideoView videoView;
+    View view;
     public RecordFragment() {
         // Required empty public constructor
+
     }
 
     /**
@@ -44,6 +48,7 @@ public class RecordFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
         }
     }
@@ -52,7 +57,10 @@ public class RecordFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_record, container, false);
+        view = inflater.inflate(R.layout.fragment_record, container, false);
+        videoView = view.findViewById(R.id.video_View);
+        videoView.start();
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
