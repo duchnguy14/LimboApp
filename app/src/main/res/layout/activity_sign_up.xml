@@ -14,7 +14,6 @@
         android:id="@+id/welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/activity_vertical_margin"
         android:text="Welcome!"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
         android:textSize="60dp" />
@@ -40,7 +39,9 @@
         android:id="@+id/uploadImage"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="Upload Image" />
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Upload Image"
+        android:textColor="@color/com_facebook_primary_button_text_color" />
 
     <EditText
         android:id="@+id/inputUsername"
@@ -55,6 +56,8 @@
         android:id="@+id/createAccount"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@android:dimen/notification_large_icon_height"
-        android:text="Create Account!" />
+        android:layout_marginTop="@android:dimen/notification_large_icon_height"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Create Account!"
+        android:textColor="@color/com_facebook_primary_button_text_color" />
 </LinearLayout>

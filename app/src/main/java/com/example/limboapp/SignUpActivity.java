@@ -6,15 +6,18 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import java.util.regex.*;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements Button.OnClickListener, TextWatcher{
 
     ImageView inputImage;
     EditText inputUsername;
+    Button createAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,32 +26,53 @@ public class SignUpActivity extends AppCompatActivity {
 
         inputImage = findViewById(R.id.inputIcon);
         inputUsername = findViewById(R.id.inputUsername);
+        createAccount = findViewById(R.id.createAccount);
 
-        inputUsername.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String current = String.valueOf(s);
-                String errorMessage = "";
-                if (current.length()<1 || current.length()>32){
-                    errorMessage.concat("\nMust be between 1 to 32 characters");
-                }
-                if (!current.matches("^.*[^a-zA-Z0-9_ ].*$")) {
-                    errorMessage.concat("\nMust only use Alphanumeric characters and _");
-                }
-                inputUsername.setError(errorMessage);
-            }
-        });
+        inputUsername.addTextChangedListener(this);
     }
 
+    // Button.OnClickListener methods
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.uploadImage:
+                break;
+            case R.id.createAccount:
+                break;
+        }
+    }
 
+    // TextWatcher methods
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        checkUsername(String.valueOf(s));
+    }
+
+    public boolean checkUsername(String username){
+        String errorMessage = "";
+        if (username.length()<1 || username.length()>32){
+            errorMessage.concat("\nMust be between 1 to 32 characters");
+        }
+        if (!username.matches("^.*[^a-zA-Z0-9_ ].*$")) {
+            errorMessage.concat("\nMust only use Alphanumeric characters and _");
+        }
+        //if username already exists
+
+        inputUsername.setError(errorMessage);
+
+        if (errorMessage.equals("")){
+            return true;
+        }
+        return false;
+    }
 }

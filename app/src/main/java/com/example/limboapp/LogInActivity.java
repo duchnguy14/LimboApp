@@ -90,6 +90,12 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
     }
 
+    public void goToSignUp(View view) {
+        intent = new Intent(getApplicationContext(), SignUpActivity.class);
+
+        startActivity(intent);
+    }
+
     @Override
     protected void onStart() {
         // Check for existing Firebase Sign In account, if the user is already signed in

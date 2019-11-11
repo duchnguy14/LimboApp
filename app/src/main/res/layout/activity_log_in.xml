@@ -186,6 +186,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toStartOf="@+id/v_guideline_75"
         app:layout_constraintStart_toStartOf="@+id/v_guideline_25"
