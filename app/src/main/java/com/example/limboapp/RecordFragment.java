@@ -1,16 +1,28 @@
 package com.example.limboapp;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.icu.util.ValueIterator;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
+import android.widget.MediaController;
+import android.widget.Toast;
 import android.widget.VideoView;
+
+import java.io.File;
 
 
 /**
@@ -25,9 +37,13 @@ public class RecordFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private VideoView videoView;
+    private TextureView textureView;
     View view;
+    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
+
+
+
     public RecordFragment() {
-        // Required empty public constructor
 
     }
 
@@ -57,9 +73,16 @@ public class RecordFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
+
         view = inflater.inflate(R.layout.fragment_record, container, false);
-        videoView = view.findViewById(R.id.video_View);
-        videoView.start();
+        videoView =(VideoView) view.findViewById(R.id.videoview);
+
+
+        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+
+
         return view;
     }
 
