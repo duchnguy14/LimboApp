@@ -4,18 +4,16 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import com.example.limboapp.dummy.DummyContent;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -62,17 +60,42 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_list, container, false);
 
+        ArrayList<String> vidList = new ArrayList<String>();
+        String video1 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
+        String video2 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
+        String video3 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
+        vidList.add(video1);
+        vidList.add(video2);
+        vidList.add(video3);
+
+
+        Users user1 = new Users("Duc", vidList);
+
+
+        ListView listView = (ListView) view.findViewById(R.id.profile_feed_listView);
+        TextView username = (TextView) view.findViewById(R.id.username_frag_textview);
+
+        username.setText(user1.getUsername());
+
+        ProfileAdapter profileAdapter = new ProfileAdapter(getContext(), R.layout.custom_profile, user1.getVideos());
+
+        listView.setAdapter(profileAdapter);
+
+
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyUserRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
+//        if (view instanceof RecyclerView) {
+//            Context context = view.getContext();
+//            RecyclerView recyclerView = (RecyclerView) view;
+//            if (mColumnCount <= 1) {
+//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//            } else {
+//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+//            }
+//            recyclerView.setAdapter(new MyUserRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+//        }
+
+
+
         return view;
     }
 

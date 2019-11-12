@@ -32,31 +32,33 @@ public class CustomAdapter extends ArrayAdapter<Users> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         String username_string = getItem(position).getUsername();
+        String videoname = getItem(position).getVideos().get(0);
 
         LayoutInflater inflater = LayoutInflater.from(custom_context);
 
         // Reference to our custom_row.xml
         convertView = inflater.inflate(custom_resource_layout, parent, false);
 
-        // Reference to our widgets
-        TextView username_textView = (TextView) convertView.findViewById(R.id.username_textView);
-        ImageButton image_button = (ImageButton) convertView.findViewById(R.id.profile_pic_imageButton);
-//        VideoView videoView = (VideoView) convertView.findViewById(R.id.videoView);
-        ImageView videoView = (ImageView) convertView.findViewById(R.id.video_imageView);
-        TextView likes_textView = (TextView) convertView.findViewById(R.id.like_numbers_textView);
-        TextView views_textView = (TextView) convertView.findViewById(R.id.view_numbers_textView);
-        TextView username2_textView = (TextView) convertView.findViewById(R.id.username_under_vid_textView);
-
-        // Set the referenced widgets
+//        // Reference to our widgets
+        TextView username_textView = (TextView) convertView.findViewById(R.id.user_post_username_textView);
+//        ImageButton image_button = (ImageButton) convertView.findViewById(R.id.profile_pic_imageButton);
+        VideoView videoView = (VideoView) convertView.findViewById(R.id.user_post_VideoView);
+//        TextView likes_textView = (TextView) convertView.findViewById(R.id.like_numbers_textView);
+//        TextView views_textView = (TextView) convertView.findViewById(R.id.view_numbers_textView);
+//        TextView username2_textView = (TextView) convertView.findViewById(R.id.username_under_vid_textView);
+//
+//        // Set the referenced widgets
         username_textView.setText(username_string);
-        image_button.setImageResource(R.drawable.giraffe);
-        // need to set video
-        videoView.setImageResource(R.drawable.limbo_giraffe);
-        likes_textView.setText("100 Likes");
-        views_textView.setText("200 Views");
-        username2_textView.setText(username_string);
+//        image_button.setImageResource(R.drawable.limbo_giraffe);
+        videoView.setVideoPath(videoname);
+//        likes_textView.setText("100 Likes");
+//        views_textView.setText("200 Views");
+//        username2_textView.setText(username_string);
+//
+//
+        videoView.start();
 
-
+//        Log.i("CustomAdapter", "User1 = " + getItem(position).getUsername());
         return convertView;
     }
 }

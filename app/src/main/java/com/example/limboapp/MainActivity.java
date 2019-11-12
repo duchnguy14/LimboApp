@@ -22,41 +22,18 @@ public class MainActivity extends AppCompatActivity
         RecordFragment.OnFragmentInteractionListener,
         UserFragment.OnListFragmentInteractionListener {
 
+    public static String PACKAGE_NAME;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Duck's
-//        setContentView(R.layout.activity_main_2);
+        PACKAGE_NAME = getApplicationContext().getPackageName();
 
         BottomNavigationView navigation = findViewById(R.id.main_navi);
         navigation.setOnNavigationItemSelectedListener(this);
 
         loadFragment(new HomeFragment());
-
-        //Duck's
-//        Toast.makeText(MainActivity.this, "HERE in MainActivity.class", Toast.LENGTH_LONG).show();
-//
-//        ArrayList<Users> usersList = new ArrayList<Users>();
-//
-//        Users user1 = new Users("fiends3175");
-//        Users user2 = new Users("Betsy");
-//        Users user3 = new Users("Tonykyo");
-//        Users user4 = new Users("WkeClutch");
-//        Users user5 = new Users("Duwabu");
-//
-//        usersList.add(user1);
-//        usersList.add(user2);
-//        usersList.add(user3);
-//        usersList.add(user4);
-//        usersList.add(user5);
-//
-//        ListView news_feed_ListView = (ListView) findViewById(R.id.news_feed_listView);
-//
-//        CustomAdapter adapter = new CustomAdapter(MainActivity.this, R.layout.custom_row, usersList);
-//
-//        news_feed_ListView.setAdapter(adapter);
 
     }
 
