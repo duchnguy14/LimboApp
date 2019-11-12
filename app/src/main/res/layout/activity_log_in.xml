@@ -172,13 +172,25 @@
 
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
         android:id="@+id/sign_in_button_twitter"
-        android:layout_width="wrap_content"
-        android:layout_height="51dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:textSize="8sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/sign_in_button_facebook"
         app:layout_constraintEnd_toStartOf="@+id/v_guideline_75"
         app:layout_constraintStart_toStartOf="@+id/v_guideline_25"
         app:layout_constraintTop_toBottomOf="@+id/sign_in_button_google" />
+
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/sign_in_button_facebook"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/v_guideline_75"
+        app:layout_constraintStart_toStartOf="@+id/v_guideline_25"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_button_twitter" />
 
     <ProgressBar
         android:id="@+id/progressBar"

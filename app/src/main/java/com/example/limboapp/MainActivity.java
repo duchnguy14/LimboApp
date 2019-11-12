@@ -12,15 +12,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnListFragmentInteractionListener,
         RecordFragment.OnFragmentInteractionListener,
         UserFragment.OnListFragmentInteractionListener {
+        Context context;
+    private static final int MY_CAMERA_REQUEST_CODE = 100;
+
 
     public static String PACKAGE_NAME;
     @Override
@@ -34,6 +37,9 @@ public class MainActivity extends AppCompatActivity
         navigation.setOnNavigationItemSelectedListener(this);
 
         loadFragment(new HomeFragment());
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        }
 
     }
 

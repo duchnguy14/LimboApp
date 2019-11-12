@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="bottom|center"
+    android:orientation="vertical"
     tools:context=".RecordFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <TextureView
+        android:id="@+id/videoview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/bt1"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:alpha=".44"
+        android:baselineAlignBottom="false"
+        android:src="@drawable/ic_action_name" />
+</RelativeLayout>
