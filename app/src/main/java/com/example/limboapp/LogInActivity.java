@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.appevents.AppEvent;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,6 +27,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -36,8 +41,11 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAuth mAuth;
+    private boolean newUser = false;
 
     SignInButton signInButtonGoogle;
+    TwitterLoginButton signInButtonTwitter;
+    LoginButton signInButtonFacebook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,14 +70,28 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
         // Get sign in buttons
         signInButtonGoogle = findViewById(R.id.sign_in_button_google);
+        signInButtonTwitter = findViewById(R.id.sign_in_button_twitter);
+        signInButtonFacebook = findViewById(R.id.sign_in_button_facebook);
 
-        // Set on click listeners
+        // Google
+        // Set on click listener
         signInButtonGoogle.setOnClickListener(this);
-        // Set on click listener for each sign in option's button (Google, Facebook, Twitter, etc)
+
+        // Twitter
+
+        // Facebook
+        FacebookSdk.getApplicationContext();
+        AppEventsLogger.activateApp(this.getApplication());
     }
 
     public void goToMain(View view) {
         intent = new Intent(getApplicationContext(), MainActivity.class);
+
+        startActivity(intent);
+    }
+
+    public void goToSignUp(View view) {
+        intent = new Intent(getApplicationContext(), SignUpActivity.class);
 
         startActivity(intent);
     }
@@ -86,7 +108,14 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     private void updateUI(FirebaseUser account) {
         if(account != null){
             // if an account already exists, direct the user to the main activity
-            goToMain(findViewById(android.R.id.content).getRootView());
+            if(newUser) {
+                // if this is the first time the user is using the app, send them to sign up activity
+                goToSignUp(findViewById(android.R.id.content).getRootView());
+            }
+            else {
+                // else, take user to main activity
+                goToMain(findViewById(android.R.id.content).getRootView());
+            }
         }
         else{
             // if there is no login info or login failed, keep the user on this activity (for now)
@@ -147,6 +176,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            newUser = task.getResult().getAdditionalUserInfo().isNewUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
