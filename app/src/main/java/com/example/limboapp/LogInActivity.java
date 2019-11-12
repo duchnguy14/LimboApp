@@ -110,6 +110,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             // if an account already exists, direct the user to the main activity
             if(newUser) {
                 // if this is the first time the user is using the app, send them to sign up activity
+                goToSignUp(findViewById(android.R.id.content).getRootView());
             }
             else {
                 // else, take user to main activity
