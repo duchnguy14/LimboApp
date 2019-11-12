@@ -36,7 +36,6 @@ import java.io.File;
 public class RecordFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private VideoView videoView;
     private TextureView textureView;
     View view;
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
@@ -73,14 +72,8 @@ public class RecordFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-
-
         view = inflater.inflate(R.layout.fragment_record, container, false);
-        videoView =(VideoView) view.findViewById(R.id.videoview);
 
-
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 
 
         return view;
