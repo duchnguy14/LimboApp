@@ -1,19 +1,24 @@
 package com.example.limboapp;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.icu.util.ValueIterator;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +28,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -33,10 +39,13 @@ import java.io.File;
  * Use the {@link RecordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecordFragment extends Fragment {
+public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
 
     private OnFragmentInteractionListener mListener;
-    private TextureView textureView;
+    private SurfaceHolder mSurfaceHolder;
+    private SurfaceView mSurfaceView;
+    final  int CAMERA_REQUEST_CODE = 1;
+    Camera camera;
     View view;
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
 
@@ -73,9 +82,15 @@ public class RecordFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_record, container, false);
+        mSurfaceView = view.findViewById(R.id.videoview);
+        mSurfaceHolder = mSurfaceView.getHolder();
 
-
-
+        if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA} , CAMERA_REQUEST_CODE);
+        } else {
+            mSurfaceHolder.addCallback(this);
+            mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        }
         return view;
     }
 
@@ -103,6 +118,33 @@ public class RecordFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+          camera =  Camera.open();
+          Camera.Parameters parameters;
+          parameters  = camera.getParameters();
+          camera.setDisplayOrientation(90);
+          parameters.setPreviewFrameRate(30);
+          parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+          camera.setParameters(parameters);
+        try {
+            camera.setPreviewDisplay(surfaceHolder);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        camera.startPreview();
+
+
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -116,5 +158,21 @@ public class RecordFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case CAMERA_REQUEST_CODE:{
+                if(grantResults.length> 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    mSurfaceHolder.addCallback(this);
+                    mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+                }else{
+                    Toast.makeText(getContext(), "Please Check Permissions", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
     }
 }
