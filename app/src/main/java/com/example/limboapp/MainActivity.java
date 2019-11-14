@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.limboapp.dummy.DummyContent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,10 +28,14 @@ public class MainActivity extends AppCompatActivity
     private static final int MY_CAMERA_REQUEST_CODE = 100;
 
 
+    public static String PACKAGE_NAME;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        PACKAGE_NAME = getApplicationContext().getPackageName();
+
         BottomNavigationView navigation = findViewById(R.id.main_navi);
         navigation.setOnNavigationItemSelectedListener(this);
 
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
         }
+
     }
 
     //checks if given fragment exists, and loads it if possible
