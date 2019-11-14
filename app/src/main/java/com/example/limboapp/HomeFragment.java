@@ -64,8 +64,8 @@ public class HomeFragment extends Fragment {
         ArrayList<Users> usersList = new ArrayList<Users>();
         ArrayList<String> vidList = new ArrayList<String>();
         String video1 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
-        String video2 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
-        String video3 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
+        String video2 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.launch;
+        String video3 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.boat;
         vidList.add(video1);
         vidList.add(video2);
         vidList.add(video3);

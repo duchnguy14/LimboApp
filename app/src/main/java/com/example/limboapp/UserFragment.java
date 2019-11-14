@@ -69,7 +69,7 @@ public class UserFragment extends Fragment {
         vidList.add(video3);
 
 
-        Users user1 = new Users("Duc", vidList);
+        Users user1 = new Users("Paige", vidList);
 
 
         ListView listView = (ListView) view.findViewById(R.id.profile_feed_listView);
