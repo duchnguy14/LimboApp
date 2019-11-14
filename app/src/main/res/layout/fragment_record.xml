@@ -16,19 +16,21 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="3">
 
         <ImageView
             android:id="@+id/bt2"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_margin="@dimen/activity_horizontal_margin"
 
             android:layout_weight="1"
+            android:paddingBottom="16dp"
             android:src="@drawable/ic_reverse" />
 
         <ImageView
@@ -39,20 +41,20 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="bottom|center"
             android:layout_weight="1"
-            android:alpha=".77"
+            android:alpha=".85"
             android:baselineAlignBottom="true"
             android:src="@drawable/ic_action_name" />
 
         <ImageView
             android:id="@+id/bt3"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:visibility="invisible"
             android:layout_weight="1"
-            android:src="@drawable/ic_reverse" />
+            android:src="@drawable/ic_reverse"
+            android:visibility="invisible" />
     </LinearLayout>
 
 </FrameLayout>
