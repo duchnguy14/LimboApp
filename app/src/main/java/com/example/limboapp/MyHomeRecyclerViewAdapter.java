@@ -2,51 +2,66 @@ package com.example.limboapp;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.media.Image;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.example.limboapp.HomeFragment.OnListFragmentInteractionListener;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private Context context;
+    private View view;
+    private ArrayList<Users> users;
+    private final OnListFragmentInteractionListener listener;
 
-    public MyHomeRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    public MyHomeRecyclerViewAdapter(Context context, ArrayList<Users> users, OnListFragmentInteractionListener listener) {
+        this.context = context;
+        this.users = users;
+        this.listener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_home, parent, false);
-        return new ViewHolder(view);
+        view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.user_post, parent, false);
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        holder.username.setText(users.get(position).getUsername());
+        holder.video.setVideoPath(users.get(position).getVideos().get(0));
+
+        holder.video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                holder.mp = mp;
+                mp.setLooping(true);
+            }
+        });
+        holder.video.start();
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                if(holder.video.isPlaying()) {
+                    holder.mp.pause();
+                }
+                else {
+                    holder.mp.start();
                 }
             }
         });
@@ -54,25 +69,26 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return users.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final View view;
+        public TextView username;
+        public ImageView icon;
+        public ImageView like_button;
+        public VideoView video;
+        public MediaPlayer mp;
+        public int stopTime;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            this.view = view;
+            username = view.findViewById(R.id.user_post_username_textView);
+            icon = view.findViewById(R.id.user_icon);
+            like_button = view.findViewById(R.id.like_button);
+            video = view.findViewById(R.id.user_post_VideoView);
+            stopTime = 0;
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.limboapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,10 +9,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.limboapp.dummy.DummyContent.DummyItem;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -68,33 +71,26 @@ public class UserFragment extends Fragment {
         vidList.add(video2);
         vidList.add(video3);
 
-
         Users user1 = new Users("Paige", vidList);
-
 
         ListView listView = (ListView) view.findViewById(R.id.profile_feed_listView);
         TextView username = (TextView) view.findViewById(R.id.username_frag_textview);
+        Button logoutButton = view.findViewById(R.id.logoutButton);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getActivity(), LogInActivity.class));
+                getActivity().finish();
+            }
+        });
 
         username.setText(user1.getUsername());
 
         ProfileAdapter profileAdapter = new ProfileAdapter(getContext(), R.layout.custom_profile, user1.getVideos());
 
         listView.setAdapter(profileAdapter);
-
-
-        // Set the adapter
-//        if (view instanceof RecyclerView) {
-//            Context context = view.getContext();
-//            RecyclerView recyclerView = (RecyclerView) view;
-//            if (mColumnCount <= 1) {
-//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//            } else {
-//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-//            }
-//            recyclerView.setAdapter(new MyUserRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-//        }
-
-
 
         return view;
     }

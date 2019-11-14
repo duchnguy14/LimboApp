@@ -2,6 +2,7 @@ package com.example.limboapp;
 
 import android.content.Context;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.nfc.Tag;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,11 +55,15 @@ public class CustomAdapter extends ArrayAdapter<Users> {
 //        likes_textView.setText("100 Likes");
 //        views_textView.setText("200 Views");
 //        username2_textView.setText(username_string);
-//
-//
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
         videoView.start();
 
-//        Log.i("CustomAdapter", "User1 = " + getItem(position).getUsername());
         return convertView;
     }
 }

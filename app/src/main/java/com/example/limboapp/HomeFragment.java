@@ -4,6 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +29,8 @@ public class HomeFragment extends Fragment {
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private OnListFragmentInteractionListener listener;
+    private Context context;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -60,45 +64,38 @@ public class HomeFragment extends Fragment {
     {
         View view = inflater.inflate(R.layout.fragment_home_list, container, false);
 
+        context = getContext();
 
-        ArrayList<Users> usersList = new ArrayList<Users>();
-        ArrayList<String> vidList = new ArrayList<String>();
+        ArrayList<Users> usersList = new ArrayList<>();
+        ArrayList<String> vidList = new ArrayList<>();
         String video1 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
         //String video2 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.launch;
         //String video3 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.boat;
-        vidList.add(video1);
-        vidList.add(video1);
-        vidList.add(video1);
+        String krispyVideo = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.krispy;
+        vidList.add(krispyVideo);
+        vidList.add(krispyVideo);
+        vidList.add(krispyVideo);
 
         Users user1 = new Users("Duc", vidList);
         Users user2 = new Users("Paige", vidList);
         Users user3 = new Users("Dara", vidList);
 
-
         usersList.add(user1);
         usersList.add(user2);
         usersList.add(user3);
 
-        ListView news_feed_ListView = (ListView) view.findViewById(R.id.news_feed_listView);
+        RecyclerView news_feed_ListView = view.findViewById(R.id.news_feed_listView);
 
 //        CustomAdapter adapter = new CustomAdapter(getContext(), R.layout.custom_row, usersList);
-        CustomAdapter adapter = new CustomAdapter(getContext(), R.layout.user_post, usersList);
+        MyHomeRecyclerViewAdapter adapter = new MyHomeRecyclerViewAdapter(context, usersList, listener);
 
         news_feed_ListView.setAdapter(adapter);
 
+        news_feed_ListView.setLayoutManager(new LinearLayoutManager(context,
+                LinearLayoutManager.VERTICAL, false));
 
-
-//         Set the adapter
-//        if (view instanceof RecyclerView) {
-//            Context context = view.getContext();
-//            RecyclerView recyclerView = (RecyclerView) view;
-//            if (mColumnCount <= 1) {
-//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//            } else {
-//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-//            }
-//            recyclerView.setAdapter(new MyHomeRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-//        }
+        PagerSnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(news_feed_ListView);
 
         return view;
     }
@@ -108,7 +105,7 @@ public class HomeFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+            listener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -118,7 +115,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     /**
