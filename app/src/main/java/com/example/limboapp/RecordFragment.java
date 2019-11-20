@@ -31,8 +31,6 @@ import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.facebook.appevents.suggestedevents.ViewOnClickListener;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -111,10 +109,12 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
            @Override
            public void onClick(View view) {
                if(isFlashOn){
-                   on();
+                   off();
+                   aSwitch.setImageResource(R.drawable.ic_flash_off);
                }
                else{
-                   off();
+                   on();
+                   aSwitch.setImageResource(R.drawable.ic_flash);
                }
            }
        });
