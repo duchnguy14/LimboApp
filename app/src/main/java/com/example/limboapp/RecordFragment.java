@@ -23,12 +23,17 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.MediaController;
+import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.File;
 import java.io.IOException;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 
 /**
@@ -45,13 +50,18 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     private SurfaceHolder mSurfaceHolder;
     private SurfaceView mSurfaceView;
     final  int CAMERA_REQUEST_CODE = 1;
+    Button mRotate;
+    Button mCapture;
     Camera camera;
+    Switch aSwitch;
+    boolean isFlashOn = false;
     View view;
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
 
 
 
     public RecordFragment() {
+
 
     }
 
@@ -78,12 +88,15 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_record, container, false);
         mSurfaceView = view.findViewById(R.id.videoview);
         mSurfaceHolder = mSurfaceView.getHolder();
+        //mCapture = view.findViewById(R.id.bt1);
+        //mRotate = view.findViewById(R.id.bt2);
+        aSwitch = view.findViewById(R.id.bt3);
 
         if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA} , CAMERA_REQUEST_CODE);
@@ -91,7 +104,60 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (isFlashOn == false){
+                    on();
+                }
+                else{
+                    off();
+                }
+
+            }
+        });
+
+
+
+
+
+
         return view;
+    }
+
+    public  void on() {
+
+        if(isFlashOn == true) {
+            Toast.makeText(getContext(), "Flash is ON", LENGTH_SHORT).show();
+        } else{
+            camera =  Camera.open();
+            Camera.Parameters parameters;
+            parameters  = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+            camera.setParameters(parameters);
+            isFlashOn = true;
+
+        }
+    }
+    public void off(){
+
+        if(isFlashOn == false) {
+            Toast.makeText(getContext(), "Flash is OFF", LENGTH_SHORT).show();
+        } else{
+            camera =  Camera.open();
+            Camera.Parameters parameters;
+            parameters  = camera.getParameters();
+            parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+            camera.setParameters(parameters);
+            isFlashOn = false;
+
+        }
+
+
+    }
+
+
+    private void captureVideo() {
     }
 
     // TODO: Rename method, update argument and hook method into UI event

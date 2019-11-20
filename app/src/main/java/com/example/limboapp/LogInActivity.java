@@ -126,7 +126,8 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button_google:
-                signInGoogle();
+                goToMain(findViewById(android.R.id.content).getRootView());
+                //signInGoogle();
                 break;
 
             // ...add a case for each sign in option (Google, Facebook, Twitter, etc)

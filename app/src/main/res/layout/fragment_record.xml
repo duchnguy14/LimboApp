@@ -43,16 +43,15 @@
             android:baselineAlignBottom="true"
             android:src="@drawable/ic_action_name" />
 
-        <ImageView
+        <Switch
             android:id="@+id/bt3"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_margin="@dimen/activity_horizontal_margin"
-            android:visibility="invisible"
             android:layout_weight="1"
-            android:src="@drawable/ic_reverse" />
+            android:visibility="visible" />
     </LinearLayout>
 
 </FrameLayout>
