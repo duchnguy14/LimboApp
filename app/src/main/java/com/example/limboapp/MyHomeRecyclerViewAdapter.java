@@ -1,5 +1,6 @@
 package com.example.limboapp;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -16,6 +17,7 @@ import com.example.limboapp.HomeFragment.OnListFragmentInteractionListener;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecyclerViewAdapter.ViewHolder> {
@@ -23,6 +25,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     private Context context;
     private View view;
     private ArrayList<Users> users;
+    private HashMap<Integer,Long> videoTimestamps;
     private final OnListFragmentInteractionListener listener;
 
     public MyHomeRecyclerViewAdapter(Context context, ArrayList<Users> users, OnListFragmentInteractionListener listener) {
@@ -54,7 +57,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
         });
         holder.video.start();
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
+        holder.video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(holder.video.isPlaying()) {
@@ -90,5 +93,16 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
             video = view.findViewById(R.id.user_post_VideoView);
             stopTime = 0;
         }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        videoTimestamps.put(holder.getAdapterPosition(),holder.video.getCurrentPosition());
     }
 }
