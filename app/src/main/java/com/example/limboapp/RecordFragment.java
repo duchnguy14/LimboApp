@@ -25,10 +25,13 @@ import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.VideoView;
+
+import com.facebook.appevents.suggestedevents.ViewOnClickListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +56,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     Button mRotate;
     Button mCapture;
     Camera camera;
-    Switch aSwitch;
+    ImageView aSwitch;
     boolean isFlashOn = false;
     View view;
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
@@ -104,18 +107,17 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (isFlashOn == false){
-                    on();
-                }
-                else{
-                    off();
-                }
-
-            }
-        });
+       aSwitch.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               if(isFlashOn){
+                   on();
+               }
+               else{
+                   off();
+               }
+           }
+       });
 
 
 
