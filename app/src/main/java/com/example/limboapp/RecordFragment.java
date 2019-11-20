@@ -130,7 +130,6 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         if(isFlashOn == true) {
             Toast.makeText(getContext(), "Flash is ON", LENGTH_SHORT).show();
         } else{
-            camera =  Camera.open();
             Camera.Parameters parameters;
             parameters  = camera.getParameters();
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
@@ -144,7 +143,6 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         if(isFlashOn == false) {
             Toast.makeText(getContext(), "Flash is OFF", LENGTH_SHORT).show();
         } else{
-            camera =  Camera.open();
             Camera.Parameters parameters;
             parameters  = camera.getParameters();
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
