@@ -25,7 +25,6 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     private Context context;
     private View view;
     private ArrayList<Users> users;
-    private HashMap<Integer,Long> videoTimestamps;
     private final OnListFragmentInteractionListener listener;
 
     public MyHomeRecyclerViewAdapter(Context context, ArrayList<Users> users, OnListFragmentInteractionListener listener) {
@@ -103,6 +102,5 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     @Override
     public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        videoTimestamps.put(holder.getAdapterPosition(),holder.video.getCurrentPosition());
     }
 }
