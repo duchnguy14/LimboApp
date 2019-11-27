@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +13,17 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.example.limboapp.HomeFragment.OnListFragmentInteractionListener;
-import com.example.limboapp.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
     private View view;
-    private ArrayList<Users> users;
+    private ArrayList<User> users;
     private final OnListFragmentInteractionListener listener;
 
-    public MyHomeRecyclerViewAdapter(Context context, ArrayList<Users> users, OnListFragmentInteractionListener listener) {
+    public MyHomeRecyclerViewAdapter(Context context, ArrayList<User> users, OnListFragmentInteractionListener listener) {
         this.context = context;
         this.users = users;
         this.listener = listener;
@@ -45,7 +41,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         holder.username.setText(users.get(position).getUsername());
-        holder.video.setVideoPath(users.get(position).getVideos().get(0));
+        holder.video.setVideoPath(users.get(position).getVideoUrls().get(0));
 
         holder.video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -97,6 +93,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     @Override
     public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
+        holder.video.start();
     }
 
     @Override

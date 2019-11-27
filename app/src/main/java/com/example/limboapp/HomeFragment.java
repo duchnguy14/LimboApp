@@ -11,9 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.example.limboapp.dummy.DummyContent.DummyItem;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,9 @@ public class HomeFragment extends Fragment {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener listener;
     private Context context;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,7 +70,7 @@ public class HomeFragment extends Fragment {
 
         context = getContext();
 
-        ArrayList<Users> usersList = new ArrayList<>();
+        ArrayList<User> usersList = new ArrayList<>();
         ArrayList<String> vidList = new ArrayList<>();
         String video1 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
         //String video2 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.launch;
@@ -76,9 +80,12 @@ public class HomeFragment extends Fragment {
         vidList.add(krispyVideo);
         vidList.add(krispyVideo);
 
-        Users user1 = new Users("Duc", vidList);
-        Users user2 = new Users("Paige", vidList);
-        Users user3 = new Users("Dara", vidList);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+        User user1 = new User("Duc", user.getPhotoUrl().toString(), vidList);
+        User user2 = new User("Paige", user.getPhotoUrl().toString(), vidList);
+        User user3 = new User("Dara", user.getPhotoUrl().toString(), vidList);
 
         usersList.add(user1);
         usersList.add(user2);

@@ -1,29 +1,24 @@
 package com.example.limboapp;
 
 import android.content.Context;
-import android.media.Image;
 import android.media.MediaPlayer;
-import android.nfc.Tag;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends ArrayAdapter<Users> {
+public class CustomAdapter extends ArrayAdapter<User> {
 
     int custom_resource_layout;
     Context custom_context;
 
     // int resource is our R.layout.custom_row,
     // Think: TV Screen, How you want it to display, and what is being displated
-    public CustomAdapter(Context context, int resource, ArrayList<Users> users) {
+    public CustomAdapter(Context context, int resource, ArrayList<User> users) {
         super(context, resource, users);
         custom_resource_layout = resource;
         custom_context = context;
@@ -33,7 +28,7 @@ public class CustomAdapter extends ArrayAdapter<Users> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         String username_string = getItem(position).getUsername();
-        String videoname = getItem(position).getVideos().get(0);
+        String videoname = getItem(position).getVideoUrls().get(0);
 
         LayoutInflater inflater = LayoutInflater.from(custom_context);
 

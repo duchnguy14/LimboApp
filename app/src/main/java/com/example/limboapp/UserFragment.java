@@ -2,20 +2,26 @@ package com.example.limboapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -31,6 +37,10 @@ public class UserFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
+
+    Context context;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -71,10 +81,14 @@ public class UserFragment extends Fragment {
         vidList.add(video2);
         vidList.add(video3);
 
-        Users user1 = new Users("Paige", vidList);
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+        User user1 = new User("Paige", user.getPhotoUrl().toString(), vidList);
 
         ListView listView = (ListView) view.findViewById(R.id.profile_feed_listView);
         TextView username = (TextView) view.findViewById(R.id.username_frag_textview);
+        ImageView userIcon = (ImageView) view.findViewById(R.id.profile_pic_imageView);
         Button logoutButton = view.findViewById(R.id.logoutButton);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -86,9 +100,11 @@ public class UserFragment extends Fragment {
             }
         });
 
-        username.setText(user1.getUsername());
+        username.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
-        ProfileAdapter profileAdapter = new ProfileAdapter(getContext(), R.layout.custom_profile, user1.getVideos());
+        Glide.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(userIcon);
+
+        ProfileAdapter profileAdapter = new ProfileAdapter(getContext(), R.layout.custom_profile, user1.getVideoUrls());
 
         listView.setAdapter(profileAdapter);
 
@@ -105,6 +121,7 @@ public class UserFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+        this.context = context;
     }
 
     @Override
