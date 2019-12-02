@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.icu.util.ValueIterator;
+import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,12 +52,17 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     private SurfaceHolder mSurfaceHolder;
     private SurfaceView mSurfaceView;
     final  int CAMERA_REQUEST_CODE = 1;
-    Button mRotate;
-    Button mCapture;
+    int camBackId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    int camFrontId = Camera.CameraInfo.CAMERA_FACING_FRONT;
+    ImageView mRotate;
+    ImageView mCapture;
     Camera camera;
     ImageView aSwitch;
     boolean isFlashOn = false;
     View view;
+    boolean recording = false;
+    MediaRecorder recorder;
+
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
 
 
@@ -95,9 +101,11 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         view = inflater.inflate(R.layout.fragment_record, container, false);
         mSurfaceView = view.findViewById(R.id.videoview);
         mSurfaceHolder = mSurfaceView.getHolder();
-        //mCapture = view.findViewById(R.id.bt1);
+        mCapture = view.findViewById(R.id.bt1);
         //mRotate = view.findViewById(R.id.bt2);
         aSwitch = view.findViewById(R.id.bt3);
+        recorder = new MediaRecorder();
+
 
         if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA} , CAMERA_REQUEST_CODE);
@@ -105,6 +113,9 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
+
+
+
        aSwitch.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
@@ -118,6 +129,18 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
                }
            }
        });
+
+        mCapture.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                recorder = new MediaRecorder();
+                initRecorder();
+
+
+            }
+        });
+
+
 
 
 
@@ -211,6 +234,8 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
     }
 
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -241,4 +266,15 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             }
         }
     }
+    private void initRecorder() {
+        //recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+        recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
+        CamcorderProfile cpHigh = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+        //recorder.setProfile(cpHigh);
+        recorder.setOutputFile("/sdcard/videocapture_example.mp4");
+        recorder.setMaxDuration(50000); // 50 seconds
+        recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
+    }
+
+
 }
