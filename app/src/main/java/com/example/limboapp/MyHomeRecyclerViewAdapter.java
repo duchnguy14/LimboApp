@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.example.limboapp.HomeFragment.OnListFragmentInteractionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -34,12 +35,10 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     private final ArrayList<Video> videos;
     private final OnListFragmentInteractionListener listener;
 
-    public MyHomeRecyclerViewAdapter(Context context, final ArrayList<Video> videos, OnListFragmentInteractionListener listener) {
+    public MyHomeRecyclerViewAdapter(Context context, OnListFragmentInteractionListener listener) {
         this.context = context;
-        this.videos = videos;
         this.listener = listener;
-
-        mAuth = FirebaseAuth.getInstance();
+        this.videos = new ArrayList<>();
 
         //Queries for all videos to add to list
         // (dangerous if there is a massive amount of videos)
@@ -47,8 +46,10 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
         q.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: reached");
                 for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
                     videos.add(databaseVideo.getValue(Video.class));
+                    Log.d(TAG, "onDataChange: latest video path: " + videos.get(videos.size()-1).getPath());
                 }
                 notifyDataSetChanged();
             }
@@ -72,6 +73,9 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         holder.username.setText(videos.get(position).getUsername());
+        holder.description.setText(videos.get(position).getDescription());
+        Log.d(TAG, "onBindViewHolder: icon = " + videos.get(position).getIconUrl());
+        Glide.with(context).load(videos.get(position).getIconUrl()).into(holder.icon);
         Uri videoUri = Uri.parse(videos.get(position).getPath());
         holder.video.setVideoURI(videoUri);
 
@@ -104,7 +108,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View view;
-        public TextView username;
+        public TextView username, description;
         public ImageView icon;
         public ImageView like_button;
         public VideoView video;
@@ -114,6 +118,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
             super(view);
             this.view = view;
             username = view.findViewById(R.id.user_post_username_textView);
+            description = view.findViewById(R.id.user_post_description);
             icon = view.findViewById(R.id.user_icon);
             like_button = view.findViewById(R.id.like_button);
             video = view.findViewById(R.id.user_post_VideoView);

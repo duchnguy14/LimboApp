@@ -42,24 +42,26 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
         this.videos = videos;
         this.listener = listener;
 
-        //get ids of all videos posted by user (stored in the user's videos path
+        //get ids of all videos posted by user (stored in the user's videos path)
         mAuth = FirebaseAuth.getInstance();
         videoIds = new ArrayList<>();
         Query idQuery = FirebaseDatabase.getInstance().getReference("users").child(mAuth.getCurrentUser().getUid()).child("videos");
         idQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                for (DataSnapshot databaseIds: dataSnapshot.getChildren()) {
+                    videoIds.add(databaseIds.getValue().toString());
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.d(TAG, "onCancelled: database error: " + databaseError);
             }
         });
 
         //Queries for user videos to add to list
-        // (dangerous if there is a massive amount of videos)
+        // (not too efficient, dangerous if there is a massive amount of videos)
         Query videoQuery = FirebaseDatabase.getInstance().getReference().child("videos");
         videoQuery.addValueEventListener(new ValueEventListener() {
             @Override

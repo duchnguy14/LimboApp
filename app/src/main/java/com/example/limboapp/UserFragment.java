@@ -76,7 +76,7 @@ public class UserFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        User currentUser = new User("Paige", user.getPhotoUrl().toString());
+        User currentUser = new User("Paige", user.getPhotoUrl().toString(),user.getUid());
 
         ListView listView = (ListView) view.findViewById(R.id.profile_feed_listView);
         TextView username = (TextView) view.findViewById(R.id.username_frag_textview);

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class User {
     private String username, iconUrl, uid;
-    private List<Video> videos;
+    private List<String> videos;
 
     public User() {
 
@@ -21,6 +21,10 @@ public class User {
         this.uid = uid;
     }
 
+    public String getUid() { return uid; }
+
+    public void setUid(String uid) { this.uid = uid; }
+
     public String getUsername() { return username; }
 
     public void setUsername(String username) { this.username = username; }
@@ -29,11 +33,7 @@ public class User {
 
     public void setIconUrl(String iconUrl) { this.iconUrl = iconUrl; }
 
-    public String getUid() { return uid; }
+    public List getVideoIds() { return videos; }
 
-    public void setUid(String key) { this.uid = uid; }
-
-    public List getVideoUrls() { return videos; }
-
-    public void setVideoUrls(List videos) { this.videos = videos; }
+    public void setVideoIds(List videos) { this.videos = videos; }
 }

@@ -1,68 +1,60 @@
 package com.example.limboapp;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import android.util.Log;
 
 public class Video {
-    private String key, description, path, uid;
-    //username, iconUrl
+    private String key;
+    private String description;
+    private String path;
+    private String username;
+    private String iconUrl;
+    //gets username, uid, and iconUrl from user
     private int likes;
 
     public Video() {
 
     }
 
-    public Video(String key, String description, String path, int likes) {
+    public Video(String key, String description, String path, String username, String iconUrl, int likes) {
         this.key = key;
         this.description = description;
         this.path = path;
+        this.username = username;
+        this.iconUrl = iconUrl;
         this.likes = likes;
+
+        Log.d("Video", "Video data:\nkey = " + key
+            + "\ndescription = " + description
+            + "\npath = " + path
+            + "\nusername = " + username
+            + "\niconUrl = " + iconUrl
+            + "\nlikes" + likes
+        );
     }
 
-    public String getUsername() {
-        final String[] username = {""};
-        Query q = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("username");
-        q.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                username[0] = dataSnapshot.getValue().toString();
-            }
+    public String getKey() { return key; }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+    public void setKey(String key) { this.key = key; }
 
-            }
-        });
-        return username[0];
-    }
+    public String getDescription() { return description; }
 
-    public String getIconUrl() {
-        final String[] iconUrl = {""};
-        Query q = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("iconUrl");
-        q.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                iconUrl[0] = dataSnapshot.getValue().toString();
-            }
+    public void setDescription(String description) { this.description = description; }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+    public String getUsername() { return username; }
 
-            }
-        });
-        return iconUrl[0];
-    }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getIconUrl() { return iconUrl; }
+
+    public void setIconUrl(String iconUrl) { this.iconUrl = iconUrl; }
 
     public String getPath() { return path; }
 
     public void setPath(String path) { this.path = path; }
 
     public int getLikes() { return likes; }
+
+    public void setLikes(int likes) { this.likes = likes; }
 
     public void incrementLikes() {
         likes++;
