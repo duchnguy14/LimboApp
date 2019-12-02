@@ -88,14 +88,11 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
             }
         });
         //add to user object
-        User newUser = new User(username,iconUrl);
+        User newUser = new User(username,iconUrl,mAuth.getCurrentUser().getUid());
         //put new user data in database by UID
-        usersRef = FirebaseDatabase.getInstance().getReference("users");
-        hopperRef = usersRef.child(mAuth.getCurrentUser().getUid());
-        hopperUpdates = new HashMap<>();
-        hopperUpdates.put("username",newUser.getUsername());
-        hopperUpdates.put("iconUrl",newUser.getIconUrl());
-        hopperRef.updateChildren(hopperUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+        usersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        usersRef.child(mAuth.getCurrentUser().getUid()).setValue(newUser)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()) {

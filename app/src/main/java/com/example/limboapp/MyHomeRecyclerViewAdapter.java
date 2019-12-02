@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,20 +15,49 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.example.limboapp.HomeFragment.OnListFragmentInteractionListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecyclerViewAdapter.ViewHolder> {
 
+    private final String TAG = "MyHomeRecyclerViewAdapter";
+    private FirebaseAuth mAuth;
+
     private Context context;
     private View view;
-    private ArrayList<User> users;
+    private final ArrayList<Video> videos;
     private final OnListFragmentInteractionListener listener;
 
-    public MyHomeRecyclerViewAdapter(Context context, ArrayList<User> users, OnListFragmentInteractionListener listener) {
+    public MyHomeRecyclerViewAdapter(Context context, final ArrayList<Video> videos, OnListFragmentInteractionListener listener) {
         this.context = context;
-        this.users = users;
+        this.videos = videos;
         this.listener = listener;
+
+        mAuth = FirebaseAuth.getInstance();
+
+        //Queries for all videos to add to list
+        // (dangerous if there is a massive amount of videos)
+        Query q = FirebaseDatabase.getInstance().getReference().child("videos");
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
+                    videos.add(databaseVideo.getValue(Video.class));
+                }
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: database error: " + databaseError);
+            }
+        });
     }
 
     @Override
@@ -40,8 +71,9 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        holder.username.setText(users.get(position).getUsername());
-        holder.video.setVideoPath(users.get(position).getVideoUrls().get(0));
+        holder.username.setText(videos.get(position).getUsername());
+        Uri videoUri = Uri.parse(videos.get(position).getVideoUrl());
+        holder.video.setVideoURI(videoUri);
 
         holder.video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
@@ -67,7 +99,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return videos.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -77,7 +109,6 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
         public ImageView like_button;
         public VideoView video;
         public MediaPlayer mp;
-        public int stopTime;
 
         public ViewHolder(View view) {
             super(view);
@@ -86,7 +117,6 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
             icon = view.findViewById(R.id.user_icon);
             like_button = view.findViewById(R.id.like_button);
             video = view.findViewById(R.id.user_post_VideoView);
-            stopTime = 0;
         }
     }
 

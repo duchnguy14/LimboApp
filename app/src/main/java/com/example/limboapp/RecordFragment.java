@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.icu.util.ValueIterator;
+import android.media.Image;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.URLUtil;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -48,7 +50,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     Camera camera;
     View view;
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
-
+    ImageView recordButton;
 
 
     public RecordFragment() {
@@ -91,6 +93,16 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
+
+        recordButton = view.findViewById(R.id.bt1);
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(view.getContext(),PublishVideo.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 

@@ -73,18 +73,10 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_list, container, false);
 
-        ArrayList<String> vidList = new ArrayList<String>();
-        String video1 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
-        String video2 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
-        String video3 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
-        vidList.add(video1);
-        vidList.add(video2);
-        vidList.add(video3);
-
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        User user1 = new User("Paige", user.getPhotoUrl().toString(), vidList);
+        User currentUser = new User("Paige", user.getPhotoUrl().toString());
 
         ListView listView = (ListView) view.findViewById(R.id.profile_feed_listView);
         TextView username = (TextView) view.findViewById(R.id.username_frag_textview);
@@ -103,10 +95,6 @@ public class UserFragment extends Fragment {
         username.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
 
         Glide.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(userIcon);
-
-        ProfileAdapter profileAdapter = new ProfileAdapter(getContext(), R.layout.custom_profile, user1.getVideoUrls());
-
-        listView.setAdapter(profileAdapter);
 
         return view;
     }

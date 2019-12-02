@@ -3,6 +3,7 @@ package com.example.limboapp;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -15,6 +16,11 @@ import android.view.ViewGroup;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -70,31 +76,31 @@ public class HomeFragment extends Fragment {
 
         context = getContext();
 
-        ArrayList<User> usersList = new ArrayList<>();
-        ArrayList<String> vidList = new ArrayList<>();
-        String video1 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
-        //String video2 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.launch;
-        //String video3 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.boat;
-        String krispyVideo = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.krispy;
-        vidList.add(krispyVideo);
-        vidList.add(krispyVideo);
-        vidList.add(krispyVideo);
+        final ArrayList<Video> videoList = new ArrayList<>();
+        String krispyVideo = "https://firebasestorage.googleapis.com/v0/b/limbo-4a265.appspot.com/o/krispy.mp4?alt=media&token=582f818a-0652-4a67-b996-a599eed4ca82";
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        User user1 = new User("Duc", user.getPhotoUrl().toString(), vidList);
-        User user2 = new User("Paige", user.getPhotoUrl().toString(), vidList);
-        User user3 = new User("Dara", user.getPhotoUrl().toString(), vidList);
+        //TODO: get video information from database and put into objects
+        Query q = FirebaseDatabase.getInstance().getReference().child("videos");
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
+                    videoList.add(databaseVideo.getValue(Video.class));
+                }
+            }
 
-        usersList.add(user1);
-        usersList.add(user2);
-        usersList.add(user3);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         RecyclerView news_feed_ListView = view.findViewById(R.id.news_feed_listView);
 
-//        CustomAdapter adapter = new CustomAdapter(getContext(), R.layout.custom_row, usersList);
-        MyHomeRecyclerViewAdapter adapter = new MyHomeRecyclerViewAdapter(context, usersList, listener);
+        MyHomeRecyclerViewAdapter adapter = new MyHomeRecyclerViewAdapter(context, videoList, listener);
 
         news_feed_ListView.setAdapter(adapter);
 

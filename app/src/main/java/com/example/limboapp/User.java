@@ -1,11 +1,10 @@
 package com.example.limboapp;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class User {
-    private String username, iconUrl;
-    private ArrayList<String> videoUrls;
-
+    private String username, iconUrl, uid;
+    private List<Video> videos;
 
     public User() {
 
@@ -14,36 +13,27 @@ public class User {
     public User(String username, String iconUrl) {
         this.username = username;
         this.iconUrl = iconUrl;
-        this.videoUrls = new ArrayList<>();
     }
 
-    public User(String username, String iconUrl, ArrayList<String> videoUrls) {
+    public User(String username, String iconUrl, String uid) {
         this.username = username;
         this.iconUrl = iconUrl;
-        this.videoUrls = videoUrls;
+        this.uid = uid;
     }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getUsername() { return username; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public void setUsername(String username) { this.username = username; }
 
-    public String getIconUrl() {
-        return iconUrl;
-    }
+    public String getIconUrl() { return iconUrl; }
 
-    public void setIconUrl(String iconUrl) {
-        this.iconUrl = iconUrl;
-    }
+    public void setIconUrl(String iconUrl) { this.iconUrl = iconUrl; }
 
-    public ArrayList<String> getVideoUrls() {
-        return videoUrls;
-    }
+    public String getUid() { return uid; }
 
-    public void setVideoUrls(ArrayList<String> videoUrls) {
-        this.videoUrls = videoUrls;
-    }
+    public void setUid(String key) { this.uid = uid; }
+
+    public List getVideoUrls() { return videos; }
+
+    public void setVideoUrls(List videos) { this.videos = videos; }
 }
