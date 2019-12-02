@@ -272,7 +272,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         CamcorderProfile cpHigh = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
         //recorder.setProfile(cpHigh);
         recorder.setOutputFile("/sdcard/videocapture_example.mp4");
-        recorder.setMaxDuration(50000); // 50 seconds
+        recorder.setMaxDuration(7000);
         recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
     }
 
