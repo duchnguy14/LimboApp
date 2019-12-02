@@ -1,35 +1,66 @@
 package com.example.limboapp;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 public class Video {
-    private String key, username, iconUrl, videoUrl;
+    private String key, description, path, uid;
+    //username, iconUrl
     private int likes;
 
     public Video() {
 
     }
 
-    public Video(String username, String iconUrl, String videoUrl, int likes) {
-        this.username = username;
-        this.iconUrl = iconUrl;
-        this.videoUrl = videoUrl;
+    public Video(String key, String description, String path, int likes) {
+        this.key = key;
+        this.description = description;
+        this.path = path;
         this.likes = likes;
     }
 
-    public String getKey() { return key; }
+    public String getUsername() {
+        final String[] username = {""};
+        Query q = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("username");
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                username[0] = dataSnapshot.getValue().toString();
+            }
 
-    public void setKey(String key) { this.key = key; }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-    public String getUsername() { return username; }
+            }
+        });
+        return username[0];
+    }
 
-    public void setUsername(String username) { this.username = username; }
+    public String getIconUrl() {
+        final String[] iconUrl = {""};
+        Query q = FirebaseDatabase.getInstance().getReference().child("users").child(uid).child("iconUrl");
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                iconUrl[0] = dataSnapshot.getValue().toString();
+            }
 
-    public String getIconUrl() { return iconUrl; }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-    public void setIconUrl(String iconUrl) { this.iconUrl = iconUrl; }
+            }
+        });
+        return iconUrl[0];
+    }
 
-    public String getVideoUrl() { return videoUrl; }
+    public String getPath() { return path; }
 
-    public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }
+    public void setPath(String path) { this.path = path; }
 
     public int getLikes() { return likes; }
 

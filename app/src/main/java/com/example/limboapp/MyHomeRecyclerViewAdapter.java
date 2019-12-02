@@ -72,7 +72,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
         holder.username.setText(videos.get(position).getUsername());
-        Uri videoUri = Uri.parse(videos.get(position).getVideoUrl());
+        Uri videoUri = Uri.parse(videos.get(position).getPath());
         holder.video.setVideoURI(videoUri);
 
         holder.video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
