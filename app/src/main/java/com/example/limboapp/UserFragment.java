@@ -185,7 +185,8 @@ public class UserFragment extends Fragment
          */
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference();
+//        myRef = mFirebaseDatabase.getReference();
+        myRef = mFirebaseDatabase.getReference(String.valueOf(R.string.dbname_users));
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
