@@ -32,8 +32,4 @@ public class User {
     public String getIconUrl() { return iconUrl; }
 
     public void setIconUrl(String iconUrl) { this.iconUrl = iconUrl; }
-
-    public List getVideoIds() { return videos; }
-
-    public void setVideoIds(List videos) { this.videos = videos; }
 }

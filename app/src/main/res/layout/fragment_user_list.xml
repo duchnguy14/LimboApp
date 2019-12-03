@@ -172,7 +172,7 @@
         app:layout_constraintStart_toStartOf="@+id/ver_guideline_37_5"
         app:layout_constraintTop_toBottomOf="@+id/username_frag_textview" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/profile_feed_listView"
         android:layout_width="0dp"
         android:layout_height="0dp"

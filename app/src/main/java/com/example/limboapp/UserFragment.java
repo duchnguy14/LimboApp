@@ -2,27 +2,24 @@ package com.example.limboapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -35,8 +32,8 @@ public class UserFragment extends Fragment {
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private int mColumnCount = 3;
+    private OnListFragmentInteractionListener listener;
     FirebaseAuth mAuth;
     FirebaseUser user;
 
@@ -54,7 +51,7 @@ public class UserFragment extends Fragment {
     public static UserFragment newInstance() {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, 1);
+        args.putInt(ARG_COLUMN_COUNT, 3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -76,11 +73,8 @@ public class UserFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-        User currentUser = new User("Paige", user.getPhotoUrl().toString(),user.getUid());
-
-        ListView listView = (ListView) view.findViewById(R.id.profile_feed_listView);
-        TextView username = (TextView) view.findViewById(R.id.username_frag_textview);
-        ImageView userIcon = (ImageView) view.findViewById(R.id.profile_pic_imageView);
+        TextView username = view.findViewById(R.id.username_frag_textview);
+        ImageView userIcon = view.findViewById(R.id.profile_pic_imageView);
         Button logoutButton = view.findViewById(R.id.logoutButton);
 
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +90,18 @@ public class UserFragment extends Fragment {
 
         Glide.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(userIcon);
 
+        //recycler
+
+        context = getContext();
+
+        RecyclerView news_feed_ListView = view.findViewById(R.id.profile_feed_listView);
+
+        MyUserRecyclerViewAdapter adapter = new MyUserRecyclerViewAdapter(context,listener);
+
+        news_feed_ListView.setAdapter(adapter);
+
+        news_feed_ListView.setLayoutManager(new GridLayoutManager(context,mColumnCount));
+
         return view;
     }
 
@@ -104,7 +110,7 @@ public class UserFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+            listener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -115,7 +121,7 @@ public class UserFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     /**
@@ -130,6 +136,6 @@ public class UserFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Video video);
     }
 }
