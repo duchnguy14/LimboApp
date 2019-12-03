@@ -34,8 +34,7 @@ public class Video {
 //    }
 
 
-    public Video(String key, String description, String path, String username, String iconUrl, String uid, int likes) {
-        this.key = key;
+    public Video(String description, String path, String username, String iconUrl, String uid, int likes) {
         this.description = description;
         this.path = path;
         this.username = username;
@@ -70,7 +69,6 @@ public class Video {
     public void setIconUrl(String iconUrl) { this.iconUrl = iconUrl; }
 
     public String getPath() { return path; }
-
 
     public String getUid() {
         return uid;

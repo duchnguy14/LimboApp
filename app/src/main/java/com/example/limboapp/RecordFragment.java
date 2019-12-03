@@ -30,9 +30,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -73,7 +77,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     MediaRecorder recorder;
     final static int REQUEST_VIDEO_CAPTURED = 1;
     String videoPath = "";
-
+    FirebaseAuth mAuth;
 
 
 
@@ -124,13 +128,14 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         //mRotate = view.findViewById(R.id.bt2);
         aSwitch = view.findViewById(R.id.bt3);
 
-
-
+        mAuth = FirebaseAuth.getInstance();
 
 
 
         if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA} , CAMERA_REQUEST_CODE);
+            Log.d("PAIGE", "onCreateView: HI");
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[] {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE} , CAMERA_REQUEST_CODE);
         } else {
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -347,7 +352,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             File videoFile =  new File(getPath(videoUri));
             Uri file = Uri.fromFile(videoFile);
             final StorageReference videoRef = FirebaseStorage.getInstance().getReference()
-                    .child(videoUri.getLastPathSegment());
+                    .child(file.getLastPathSegment());
             UploadTask uploadTask = videoRef.putFile(file);
 
             uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -359,12 +364,31 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     StorageMetadata metadata = taskSnapshot.getMetadata();
+
                     //TODO: work here when merged
                     Task<Uri> downloadUrl = videoRef.getDownloadUrl();
                     downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             String videoReference = uri.toString();
+                            Log.d("PAIGE", "onSuccess: videoReference = " + videoReference);
+                            Video video = new Video("My first video upload!",
+                                    videoReference,
+                                    mAuth.getCurrentUser().getDisplayName(),
+                                    mAuth.getCurrentUser().getPhotoUrl().toString().replace("s96-c", "s400-c"),
+                                    mAuth.getCurrentUser().getUid(),0);
+                            DatabaseReference videoDataRef = FirebaseDatabase.getInstance().getReference().child("videos");
+
+                            videoDataRef.push().setValue(video).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getContext(), "Your video has been uploaded!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Log.d("PAIGE", "error adding new video to database: " + task.getException());
+                                    }
+                                }
+                            });
                         }
                     });
                 }
