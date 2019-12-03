@@ -94,7 +94,7 @@ public class UserFragmentPaige extends Fragment {
 
         RecyclerView news_feed_ListView = view.findViewById(R.id.profile_feed_listView);
 
-        MyUserRecyclerViewAdapter adapter = new MyUserRecyclerViewAdapter(context,listener);
+        MyUserRecyclerViewAdapter adapter = new MyUserRecyclerViewAdapter(context);
 
         news_feed_ListView.setAdapter(adapter);
 

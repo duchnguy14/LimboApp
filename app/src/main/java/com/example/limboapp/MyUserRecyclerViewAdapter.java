@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.VideoView;
 
-import com.example.limboapp.UserFragmentPaige.OnListFragmentInteractionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,15 +28,11 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
 
     private View view;
     private final ArrayList<Video> videos;
-    private final ArrayList<String> videoIds;
-    private final OnListFragmentInteractionListener listener;
 
-    public MyUserRecyclerViewAdapter(Context context, OnListFragmentInteractionListener listener) {
-        this.listener = listener;
+    public MyUserRecyclerViewAdapter(Context context) {
         //get ids of all videos posted by user (stored in the user's videos path)
         mAuth = FirebaseAuth.getInstance();
         videos = new ArrayList<>();
-        videoIds = new ArrayList<>();
 
         //Queries for user videos to add to list
         // (not too efficient, dangerous if there is a massive amount of videos)

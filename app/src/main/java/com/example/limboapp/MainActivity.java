@@ -20,8 +20,7 @@ import androidx.fragment.app.Fragment;
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnListFragmentInteractionListener,
-        RecordFragment.OnFragmentInteractionListener,
-        UserFragment.OnListFragmentInteractionListener {
+        RecordFragment.OnFragmentInteractionListener {
         Context context;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
 
@@ -108,18 +107,6 @@ public class MainActivity extends AppCompatActivity
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(getApplicationContext());
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
-
-
-
-
-
-    @Override
-    public void onListFragmentInteraction(Video video) {
-
-    }
-
-
-
 
 
 

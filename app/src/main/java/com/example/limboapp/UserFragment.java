@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,12 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
+
 public class UserFragment extends Fragment
 {
 
@@ -48,7 +45,7 @@ public class UserFragment extends Fragment
     private TextView mPosts, mFollowers, mFollowing, mDisplayName, mUsername, mWebsite, mDescription;
     private ProgressBar mProgressBar;
     private CircleImageView mProfilePhoto;
-    private GridView gridView;
+    private RecyclerView gridView;
     private Toolbar toolbar;
     private ImageView profileMenu;
 
@@ -88,7 +85,7 @@ public class UserFragment extends Fragment
         mFollowers = (TextView) view.findViewById(R.id.tvFollowers);
         mFollowing = (TextView) view.findViewById(R.id.tvFollowing);
         mProgressBar = (ProgressBar) view.findViewById(R.id.profileProgressBar);
-        gridView = (GridView) view.findViewById(R.id.gridView);
+        gridView = (RecyclerView) view.findViewById(R.id.gridView);
         toolbar = (Toolbar) view.findViewById(R.id.profileToolBar);
         profileMenu = (ImageView) view.findViewById(R.id.profileMenu);
 
@@ -119,6 +116,11 @@ public class UserFragment extends Fragment
             }
         });
 
+        MyUserRecyclerViewAdapter adapter = new MyUserRecyclerViewAdapter(mContext);
+
+        gridView.setAdapter(adapter);
+
+        gridView.setLayoutManager(new GridLayoutManager(mContext,mColumnCount));
 
         return view;
     }
@@ -277,18 +279,6 @@ public class UserFragment extends Fragment
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
     }
-
-
-
-
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(Video video);
-    }
-
-
-
-
 }
 
 

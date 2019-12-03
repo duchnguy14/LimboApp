@@ -107,23 +107,18 @@
                 android:id="@+id/relLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
-                android:layout_below="@id/linLayout2">
+                android:layout_below="@id/linLayout2"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="0dp">
 
                 <!--                Notes: NEED TO FIX: Maybe numColumns = 4?-->
-                <GridView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/gridView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:numColumns="3"
-                    android:horizontalSpacing="1dp"
-                    android:verticalSpacing="1dp"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:stretchMode="columnWidth">
-                </GridView>
-
-
-
+                    android:numColumns="3"
+                    android:stretchMode="columnWidth"></androidx.recyclerview.widget.RecyclerView>
 
 
             </RelativeLayout>
