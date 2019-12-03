@@ -107,18 +107,15 @@ public class UserFragment extends Fragment
         setupFirebaseAuth();
 
 
-        // Notes: Need to fix: Maybe this will be signout!!!
-        TextView editProfile = (TextView) view.findViewById(R.id.textEditProfile);
-        editProfile.setOnClickListener(new View.OnClickListener() {
+        // Notes: signout!!!
+        TextView signout = (TextView) view.findViewById(R.id.signout);
+        signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Log.d(TAG, "onClick: navigating to " + mContext.getString(R.string.edit_profile_fragment));
-//                Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-//
-//                // Notes: The value is where we are coming from.
-//                intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
-//                startActivity(intent);
                 Log.d(TAG, "onClick: SIGN OUT CLICKED");
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getActivity(), LogInActivity.class));
+                getActivity().finish();
             }
         });
 
