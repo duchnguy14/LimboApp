@@ -1,9 +1,13 @@
-package com.example.limboapp.share;
+package com.example.limboapp;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.icu.util.ValueIterator;
+import android.media.Image;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,15 +15,21 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
+import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
-import com.example.limboapp.R;
-
+import java.io.File;
 import java.io.IOException;
 
 
@@ -40,7 +50,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     Camera camera;
     View view;
     private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
-
+    ImageView recordButton;
 
 
     public RecordFragment() {
@@ -83,6 +93,16 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
+
+        recordButton = view.findViewById(R.id.bt1);
+        recordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(view.getContext(),PublishVideo.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 

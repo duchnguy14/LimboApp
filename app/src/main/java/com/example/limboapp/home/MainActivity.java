@@ -1,4 +1,4 @@
-package com.example.limboapp.home;
+package com.example.limboapp;
 
 import android.Manifest;
 import android.content.Context;
@@ -18,14 +18,15 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnListFragmentInteractionListener,
         RecordFragment.OnFragmentInteractionListener,
-        UserFragment.OnListFragmentInteractionListener
-{
+        UserFragment.OnListFragmentInteractionListener {
         Context context;
     private static final int MY_CAMERA_REQUEST_CODE = 100;
 
@@ -112,4 +113,9 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
+    @Override
+    public void onListFragmentInteraction(Video video) {
+
+    }
 }

@@ -1,53 +1,98 @@
-package com.example.limboapp.adapters;
+package com.example.limboapp;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.VideoView;
 
-import com.example.limboapp.R;
-import com.example.limboapp.profile.UserFragment.OnListFragmentInteractionListener;
-import com.example.limboapp.dummy.DummyContent.DummyItem;
+import com.example.limboapp.UserFragment.OnListFragmentInteractionListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
+import java.util.ArrayList;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private final String TAG = "MyUserRecyclerViewAdapter";
+    private FirebaseAuth mAuth;
 
-    public MyUserRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
-        mValues = items;
-        mListener = listener;
+    private View view;
+    private final ArrayList<Video> videos;
+    private final ArrayList<String> videoIds;
+    private final OnListFragmentInteractionListener listener;
+
+    public MyUserRecyclerViewAdapter(Context context, OnListFragmentInteractionListener listener) {
+        this.listener = listener;
+        //get ids of all videos posted by user (stored in the user's videos path)
+        mAuth = FirebaseAuth.getInstance();
+        videos = new ArrayList<>();
+        videoIds = new ArrayList<>();
+
+        //Queries for user videos to add to list
+        // (not too efficient, dangerous if there is a massive amount of videos)
+        Log.d(TAG, "MyUserRecyclerViewAdapter: username = " + mAuth.getCurrentUser().getDisplayName());
+        Query videoQuery = FirebaseDatabase.getInstance().getReference().child("videos")
+                .orderByChild("username").equalTo(mAuth.getCurrentUser().getDisplayName());
+        videoQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.d(TAG, "onDataChange: reached");
+                for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
+                    videos.add(databaseVideo.getValue(Video.class));
+                }
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: database error: " + databaseError);
+            }
+        });
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+        view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_user, parent, false);
-        return new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
+        Uri videoUri = Uri.parse(videos.get(position).getPath());
+        holder.video.setVideoURI(videoUri);
+
+        holder.video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                holder.mp = mp;
+                mp.setLooping(true);
+                mp.setVolume(0f, 0f);
+            }
+        });
+        holder.video.start();
+
+        holder.video.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                if(holder.video.isPlaying()) {
+                    holder.mp.pause();
+                }
+                else {
+                    holder.mp.start();
                 }
             }
         });
@@ -55,25 +100,29 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return videos.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final View view;
+        public VideoView video;
+        public MediaPlayer mp;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            this.view = view;
+            video = view.findViewById(R.id.fragment_user_VideoView);
         }
+    }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
+    @Override
+    public void onViewAttachedToWindow(@NonNull ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        holder.video.start();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
     }
 }

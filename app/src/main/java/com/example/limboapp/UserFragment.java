@@ -1,29 +1,25 @@
 package com.example.limboapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -31,33 +27,31 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HomeFragment extends Fragment {
-
-    private static final String TAG = "(Debug) HomeFragment";
+public class UserFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
-    private int mColumnCount = 1;
+    private int mColumnCount = 3;
     private OnListFragmentInteractionListener listener;
-    private Context context;
+    FirebaseAuth mAuth;
+    FirebaseUser user;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
+    Context context;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public HomeFragment() {
+    public UserFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
+    public static UserFragment newInstance() {
+        UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, 1);
+        args.putInt(ARG_COLUMN_COUNT, 3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,24 +67,40 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        Log.d(TAG, "onCreateView: called");
-        View view = inflater.inflate(R.layout.fragment_home_list, container, false);
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_user_list, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+
+        TextView username = view.findViewById(R.id.username_frag_textview);
+        ImageView userIcon = view.findViewById(R.id.profile_pic_imageView);
+        Button logoutButton = view.findViewById(R.id.logoutButton);
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getActivity(), LogInActivity.class));
+                getActivity().finish();
+            }
+        });
+
+        username.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+        Glide.with(this).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()).into(userIcon);
+
+        //recycler
 
         context = getContext();
 
-        RecyclerView news_feed_ListView = view.findViewById(R.id.news_feed_listView);
+        RecyclerView news_feed_ListView = view.findViewById(R.id.profile_feed_listView);
 
-        MyHomeRecyclerViewAdapter adapter = new MyHomeRecyclerViewAdapter(context, listener);
+        MyUserRecyclerViewAdapter adapter = new MyUserRecyclerViewAdapter(context,listener);
 
         news_feed_ListView.setAdapter(adapter);
 
-        news_feed_ListView.setLayoutManager(new LinearLayoutManager(context,
-                LinearLayoutManager.VERTICAL, false));
-
-        PagerSnapHelper snapHelper = new PagerSnapHelper();
-        snapHelper.attachToRecyclerView(news_feed_ListView);
+        news_feed_ListView.setLayoutManager(new GridLayoutManager(context,mColumnCount));
 
         return view;
     }
@@ -105,6 +115,7 @@ public class HomeFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+        this.context = context;
     }
 
     @Override
@@ -125,6 +136,6 @@ public class HomeFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Video video);
     }
 }
