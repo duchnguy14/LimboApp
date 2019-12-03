@@ -212,7 +212,7 @@ public class UserFragment extends Fragment
         Log.d(TAG, "setupFirebaseAuth: About to read and write from DB");
 
         // Notes: Allows us to get the dataSnapshot to either read or write to database
-        myRef.addValueEventListener(new ValueEventListener() {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
@@ -220,6 +220,9 @@ public class UserFragment extends Fragment
                 //Notes retrieve user information from the database
                 User user = mFirebaseMethods.getUser(dataSnapshot);
                 setProfileWidgets(user);
+
+//                mFirebaseMethods.incrementPost();
+
 
                 //Notes: retrieve images for the user in question
                 // Notes: NEED TO FIX: retrieve videos
@@ -247,6 +250,46 @@ public class UserFragment extends Fragment
         FirebaseUser user = mAuth.getCurrentUser();
     }
 
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume: ");
+        super.onResume();
+
+
+
+        myRef = mFirebaseDatabase.getReference("users");
+
+       
+
+//        myRef = myRef.child(mAuth.getCurrentUser().getUid());
+
+        Log.d(TAG, "setupFirebaseAuth: About to read and write from DB");
+
+        // Notes: Allows us to get the dataSnapshot to either read or write to database
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                Log.d(TAG, "onDataChange: CALLLLLED");
+                //Notes retrieve user information from the database
+                User user = mFirebaseMethods.getUser(dataSnapshot);
+                setProfileWidgets(user);
+
+//                mFirebaseMethods.incrementPost();
+
+
+                //Notes: retrieve images for the user in question
+                // Notes: NEED TO FIX: retrieve videos
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d(TAG, "onCancelled: Failllllled " + databaseError.toString());
+            }
+        });
+
+
+    }
 
     @Override
     public void onStop() {

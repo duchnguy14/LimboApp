@@ -12,8 +12,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseMethods
 {
@@ -37,6 +39,8 @@ public class FirebaseMethods
     // Notes: Variables
     private Context mContext;
     private String userID;
+//    private Long post_num = 0L;
+
 
 
 
@@ -108,22 +112,53 @@ public class FirebaseMethods
     }
 
 
-//    /*
-//       Notes: Updates the posts in the users node in the database.
-//    */
-//    public void addPost()
-//    {
-//        Long post_num =
-//
-//
-//
-//        Log.d(TAG, "addPost: incrementing post inside the users database!");
+    /*
+       Notes: Updates the posts in the users node in the database.
+    */
+    public void incrementPost()
+    {
+        Log.d(TAG, "addPost: incrementing post inside the users database!");
+
+        myRef = myRef.child("users").child(mAuth.getCurrentUser().getUid());
+
+
+
+            // Read from the database
+            myRef.addListenerForSingleValueEvent(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    User currentUser = dataSnapshot.getValue(User.class);
+
+                    Long post_num = currentUser.getPosts();
+
+                    Log.d(TAG, "onDataChange: post num = " + post_num);
+
+                    post_num += 1L;
+
+                    Log.d(TAG, "onDataChange: (Incremented) post num = " + post_num);
+
+                    myRef.child("posts").setValue(post_num);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", error.toException());
+                }
+            });
+
+
+
 //        myRef.child(mContext.getString(R.string.dbname_users))
 //                .child(userID) // Notes: Current User logged in
 //                .child(mContext.getString(R.string.field_posts)) // Notes: the posts of the current user logged in
 //                .setValue(username);
-//
-//    }
+
+    }
 
 
 
@@ -355,6 +390,7 @@ public class FirebaseMethods
 
 
         }
+
         return user;
 
     }
