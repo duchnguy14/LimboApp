@@ -8,18 +8,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.limboapp.R;
-import com.example.limboapp.share.RecordFragment;
-import com.example.limboapp.util.UniversalImageLoader;
-import com.example.limboapp.profile.UserFragment;
+import com.example.limboapp.RecordFragment;
 import com.example.limboapp.dummy.DummyContent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity
@@ -114,8 +109,11 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    @Override
-    public void onListFragmentInteraction(Video video) {
+//    @Override
+//    public void onListFragmentInteraction(Video video) {
+//
+//    }
 
-    }
+
+
 }

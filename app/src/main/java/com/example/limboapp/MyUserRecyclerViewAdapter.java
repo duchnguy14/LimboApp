@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.VideoView;
 
-import com.example.limboapp.UserFragment.OnListFragmentInteractionListener;
+import com.example.limboapp.UserFragmentPaige.OnListFragmentInteractionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

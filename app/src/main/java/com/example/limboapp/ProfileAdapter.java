@@ -1,4 +1,4 @@
-package com.example.limboapp.adapters;
+package com.example.limboapp;
 
 import android.content.Context;
 import android.view.LayoutInflater;

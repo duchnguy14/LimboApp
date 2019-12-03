@@ -1,19 +1,18 @@
-package com.example.limboapp.login;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.limboapp;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.limboapp.home.MainActivity;
-import com.example.limboapp.R;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -28,8 +27,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener
@@ -177,7 +174,8 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
         switch (v.getId()) {
             case R.id.sign_in_button_google:
-                signInGoogle();
+//                signInGoogle();
+                goToMain(v);
                 break;
 
             // ...add a case for each sign in option (Google, Facebook, Twitter, etc)

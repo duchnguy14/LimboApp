@@ -1,4 +1,4 @@
-package com.example.limboapp.login;
+package com.example.limboapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
