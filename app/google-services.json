@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "43815278134-6vv65g5dd8m5s91qaebg71g67ajvou2f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.limboapp",
+            "certificate_hash": "0304ff0bcf5cf6f84a534f5c7d30f1e1e4af3fdf"
+          }
+        },
+        {
+          "client_id": "43815278134-ocso1dhof3ovk3bu60j9frsd5uc63286.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.limboapp",
+            "certificate_hash": "c3a155f133ff2a0ac386dba61fb8eafd1d3d66b0"
+          }
+        },
+        {
           "client_id": "43815278134-gpbrs5pi8qhnq8ioff8ulufria96uul0.apps.googleusercontent.com",
           "client_type": 3
         }

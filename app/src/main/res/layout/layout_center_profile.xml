@@ -1,0 +1,145 @@
+<!-- Note: (Suppose to) Layout file going to be on upper portion of the userprofile
+                activity where it holds profile pic,
+                number of posts, followers, followings, edit
+                profile and bio -->
+
+<!-- Note: (Need to fix) Layout file contains all of the contents
+                of a userprofile. Need to separate it out into
+                different xml files.-->
+<merge xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+
+        <!-- Note: Middle Contents-->
+        <RelativeLayout
+            android:id="@+id/relLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relLayout1"
+            android:background="@drawable/white_limbogreen_border_bottom">
+
+            <!--  Notes: Contains profile pic, number of posts, number of followers
+                            , number of followings, and edit profile-->
+            <LinearLayout
+                android:id="@+id/linLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <!-- Note: 0dp because of the weight sum for width.
+                            Match parent for height because of wrap content
+                            of the linearLayout_1-->
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="25"
+                    android:layout_marginLeft="25dp">
+
+                    <!-- Note: 	Circle imageview for profile pic-->
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_photo"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_centerHorizontal="true"
+                        app:civ_border_width="2dp"
+                        app:civ_border_color="@color/black"
+                        />
+
+
+                </RelativeLayout>
+
+                <!-- Note: 0dp because of the weight sum for width.
+                           Match parent for height because of wrap content
+                           of the linearLayout_1-->
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="75"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp">
+
+                    <!-- Note: Top-Center video number posts, number of followers,
+                                    number of following -->
+                    <include layout="@layout/snippet_top_profile"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <!-- Note: Contains the profile name and bio-->
+            <LinearLayout
+                android:id="@+id/linLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@id/linLayout"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/display_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text=" "/>
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text=" "/>
+
+            </LinearLayout>
+
+            <!-- Notes: These are the video posts           -->
+            <RelativeLayout
+                android:id="@+id/relLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:layout_below="@id/linLayout2">
+
+                <!--                Notes: NEED TO FIX: Maybe numColumns = 4?-->
+                <GridView
+                    android:id="@+id/gridView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:numColumns="3"
+                    android:horizontalSpacing="1dp"
+                    android:verticalSpacing="1dp"
+                    android:gravity="center"
+                    android:stretchMode="columnWidth">
+                </GridView>
+
+
+
+
+
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+
+
+</merge>

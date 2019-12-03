@@ -11,4 +11,42 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+
+
+
+
+
+
+
+
+    <!--    Notes: Firebase Database fields -->
+    <!--    Notes: These are just the name of the node-->
+    <string name="dbname_users">users</string>
+    <string name="dbname_user_account_settings">user_account_settings</string>
+    <string name="field_email">email</string>
+    <string name="field_username">username</string>
+    <string name="field_display_name">display_name</string>
+    <string name="field_website">website</string>
+    <string name="field_description">description</string>
+    <string name="field_phone_number">phone_number</string>
+    <string name="field_posts">posts</string>
+
+
+
+
+    <!--    Notes: Fragment names -->
+    <string name="edit_profile_fragment">Edit Profile</string>
+    <string name="profile_fragment">Profile</string>
+    <string name="sign_out_fragment">Sign Out</string>
+
+
+
+
+
+
+
+
+
 </resources>

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.example.limboapp.R;
+
 public class ForgotInfoActivity extends AppCompatActivity {
 
     @Override

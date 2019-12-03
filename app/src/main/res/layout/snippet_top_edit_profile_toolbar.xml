@@ -1,0 +1,73 @@
+<!-- Note: Layout file going to be on top of
+               the fragment_edit_profile.-->
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/white_limbogreen_border_bottom"
+        >
+
+        <!-- Notes:
+                Need to give toolbar an ID because we need to reference it
+                    to add a menu onto it. -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profileToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!--  Notes: Possibly need to centerVertical = true?
+                               But i already think it is-->
+                <ImageView
+                    android:id="@+id/backArrow"
+                    android:src="@drawable/ic_back_arrow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"/>
+
+                <TextView
+                    android:id="@+id/profileName"
+                    android:layout_toRightOf="@+id/backArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Edit Profile"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="5dp"/>
+
+                <!-- Notes: Need to fix:
+                            Save the changes...possibly have a textView that says
+                            "Save" instead of ImageView-->
+                <ImageView
+                    android:id="@+id/saveChanges"
+                    android:src="@drawable/ic_checkmark"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_alignParentRight="true"/>
+
+
+
+
+
+
+
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+
+</merge>

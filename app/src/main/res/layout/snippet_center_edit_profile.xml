@@ -1,0 +1,145 @@
+<!-- Note: Layout file going to be in the center of
+               the fragment_edit_profile.-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="20dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_photo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                app:civ_border_width="2dp"
+                app:civ_border_color="@color/black"
+                />
+
+
+<!--            <TextView-->
+<!--                android:id="@+id/changeProfilePhoto"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Change Profile Photo"-->
+<!--                android:textSize="16sp"-->
+<!--                android:layout_below="@+id/profile_photo"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:textColor="@color/blue"/>-->
+
+            <!--            Notes: Username section -->
+            <RelativeLayout
+                android:id="@+id/relLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/profile_photo"
+                android:layout_marginTop="80dp"
+                android:background="@drawable/grey_border_bottom">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_username"
+                    android:layout_centerVertical="true"/>
+
+                <!--                Notes: editText has the grey underline bottom, if we
+                                                do background @null, that should make it disappear.
+                                           Since this editText will be to the right of a 35dp width
+                                                imageView, we will need a 40dp from the left/start.
+                                           InputType textNoSuggestions has no spell check and autocorrect.-->
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="40dp"
+                    android:background="@null"
+                    android:inputType="textNoSuggestions"
+                    android:hint="Username"/>
+
+            </RelativeLayout>
+
+
+            <!--            Notes: Display name section -->
+            <RelativeLayout
+                android:id="@+id/relLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/relLayout1"
+                android:background="@drawable/grey_border_bottom">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_display_name"
+                    android:layout_centerVertical="true"/>
+
+                <!--                Notes: editText has the grey underline bottom, if we
+                                                do background @null, that should make it disappear.
+                                           Since this editText will be to the right of a 35dp width
+                                                imageView, we will need a 40dp from the left/start.
+                                           InputType textNoSuggestions has no spell check and autocorrect.-->
+                <EditText
+                    android:id="@+id/display_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="40dp"
+                    android:background="@null"
+                    android:inputType="textNoSuggestions"
+                    android:hint="Display name"/>
+
+            </RelativeLayout>
+
+
+
+
+            <!--            Notes: Description section -->
+            <RelativeLayout
+                android:id="@+id/relLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/relLayout2"
+                android:background="@drawable/grey_border_bottom">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_description"
+                    android:layout_centerVertical="true"/>
+
+                <!--                Notes: editText has the grey underline bottom, if we
+                                                do background @null, that should make it disappear.
+                                           Since this editText will be to the right of a 35dp width
+                                                imageView, we will need a 40dp from the left/start.
+                                           InputType textNoSuggestions has no spell check and autocorrect.-->
+                <EditText
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="40dp"
+                    android:background="@null"
+                    android:inputType="textNoSuggestions"
+                    android:hint="Description"/>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+</merge>
