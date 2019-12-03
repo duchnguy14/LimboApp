@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
@@ -54,7 +54,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     boolean recording = false;
     MediaRecorder recorder;
     final static int REQUEST_VIDEO_CAPTURED = 1;
-    String srcPath = "/storage/emulated/0/DCIM/Limbo/test.mp4";
+    String srcPath = "/storage/emulated/0/DCIM/Limbo/test";
 
 
 
@@ -76,7 +76,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         RecordFragment fragment = new RecordFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        File file = new File(Environment.getExternalStorageDirectory(),"Limbo");
+        File file = new File(Environment.DIRECTORY_PICTURES,"Limbo");
         if(!file.exists()){
             Log.d("DEBUG", "newInstance: mkdirs");
             file.mkdirs();
@@ -136,13 +136,16 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
 
         mCapture.setOnClickListener(new View.OnClickListener() {
 
+
             public void onClick(View view) {
 
-                try {
-                    initRecorder();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                startActivityForResult(intent,REQUEST_VIDEO_CAPTURED);
+//                try {
+//                    initRecorder();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -277,37 +280,36 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             }
         }
     }
-    private void initRecorder() throws IOException{
-
-        recorder = new MediaRecorder();
-        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-        //recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-
-
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_2_TS);
-        //recorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
-        recorder.setPreviewDisplay(mSurfaceHolder.getSurface());
-        recorder.setOutputFile(srcPath);
-        recorder.setMaxDuration(7000);
-        recorder.setMaxFileSize(5000000);
-
-        recorder.prepare();
-        recorder.start();
-    }
-    protected void stopRecording() {
-        recorder.stop();
-        recorder.release();
-        camera.release();
-    }
-
-    private void releaseMediaRecorder(){
-        if (recorder != null) {
-            recorder.reset();
-            recorder.release();
-            recorder = null;
-            camera.lock();
-        }
-    }
+//    private void initRecorder() throws IOException{
+//
+//        recorder = new MediaRecorder();
+//        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+//       // recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+//
+//
+//        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+//        //recorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+//        recorder.setPreviewDisplay(mSurfaceHolder.getSurface());
+//        recorder.setOutputFile(srcPath);
+//        recorder.setMaxDuration(7000);
+//        recorder.setMaxFileSize(5000000);
+//        recorder.prepare();
+//        recorder.start();
+//    }
+//    protected void stopRecording() {
+//        recorder.stop();
+//        recorder.release();
+//        camera.release();
+//    }
+//
+//    private void releaseMediaRecorder(){
+//        if (recorder != null) {
+//            recorder.reset();
+//            recorder.release();
+//            recorder = null;
+//            camera.lock();
+//        }
+//    }
 
     private void releaseCamera(){
         if (camera != null){
