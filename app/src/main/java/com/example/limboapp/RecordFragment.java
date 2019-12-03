@@ -9,6 +9,8 @@ import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import java.io.File;
 import java.io.IOException;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -51,6 +54,8 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     boolean recording = false;
     MediaRecorder recorder;
     final static int REQUEST_VIDEO_CAPTURED = 1;
+    String srcPath = "/storage/emulated/0/DCIM/Limbo/test.mp4";
+
 
 
 
@@ -71,7 +76,15 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         RecordFragment fragment = new RecordFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        File file = new File(Environment.getExternalStorageDirectory(),"Limbo");
+        if(!file.exists()){
+            Log.d("DEBUG", "newInstance: mkdirs");
+            file.mkdirs();
+        }
+
+
         return fragment;
+
     }
 
     @Override
@@ -92,6 +105,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         mCapture = view.findViewById(R.id.bt1);
         //mRotate = view.findViewById(R.id.bt2);
         aSwitch = view.findViewById(R.id.bt3);
+
 
 
 
@@ -129,16 +143,6 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-//             recorder.start();   // Recording is now started
-//                recorder.stop();
-
-                //ANOTHER way
-
-
-//                Intent intent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
-//                startActivityForResult(intent, REQUEST_VIDEO_CAPTURED);
-
             }
         });
 
@@ -274,23 +278,42 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         }
     }
     private void initRecorder() throws IOException{
-        recorder = new MediaRecorder();
 
-        recorder.setPreviewDisplay(mSurfaceHolder.getSurface());
+        recorder = new MediaRecorder();
         recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         //recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 
 
         recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_2_TS);
-        CamcorderProfile cpHigh = CamcorderProfile.get(CamcorderProfile.QUALITY_LOW);
-        //recorder.setProfile(cpHigh);
-        recorder.setOutputFile("/sdcard/videocapture_example.mp4");
+        //recorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+        recorder.setPreviewDisplay(mSurfaceHolder.getSurface());
+        recorder.setOutputFile(srcPath);
         recorder.setMaxDuration(7000);
-        recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
+        recorder.setMaxFileSize(5000000);
 
         recorder.prepare();
         recorder.start();
     }
+    protected void stopRecording() {
+        recorder.stop();
+        recorder.release();
+        camera.release();
+    }
 
+    private void releaseMediaRecorder(){
+        if (recorder != null) {
+            recorder.reset();
+            recorder.release();
+            recorder = null;
+            camera.lock();
+        }
+    }
+
+    private void releaseCamera(){
+        if (camera != null){
+            camera.release();
+            camera = null;
+        }
+    }
 
 }
