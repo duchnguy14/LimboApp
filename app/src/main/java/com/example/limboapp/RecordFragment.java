@@ -5,34 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.icu.util.ValueIterator;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.TextureView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.URLUtil;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.Switch;
-import android.widget.Toast;
-import android.widget.VideoView;
-
-import java.io.File;
 import java.io.IOException;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -62,8 +50,8 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     View view;
     boolean recording = false;
     MediaRecorder recorder;
+    final static int REQUEST_VIDEO_CAPTURED = 1;
 
-    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
 
 
 
@@ -104,7 +92,9 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         mCapture = view.findViewById(R.id.bt1);
         //mRotate = view.findViewById(R.id.bt2);
         aSwitch = view.findViewById(R.id.bt3);
-        recorder = new MediaRecorder();
+
+
+
 
 
         if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
@@ -133,9 +123,21 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         mCapture.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                recorder = new MediaRecorder();
-                initRecorder();
 
+                try {
+                    initRecorder();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+//             recorder.start();   // Recording is now started
+//                recorder.stop();
+
+                //ANOTHER way
+
+
+//                Intent intent = new Intent(android.provider.MediaStore.ACTION_VIDEO_CAPTURE);
+//                startActivityForResult(intent, REQUEST_VIDEO_CAPTURED);
 
             }
         });
@@ -214,8 +216,10 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
           parameters  = camera.getParameters();
           camera.setDisplayOrientation(90);
           parameters.setPreviewFrameRate(30);
-          parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+          parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
           camera.setParameters(parameters);
+
+
         try {
             camera.setPreviewDisplay(surfaceHolder);
         } catch (IOException e) {
@@ -232,6 +236,9 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        camera.stopPreview();
+        camera.release();
+
     }
 
 
@@ -266,14 +273,23 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             }
         }
     }
-    private void initRecorder() {
-        //recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
-        CamcorderProfile cpHigh = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+    private void initRecorder() throws IOException{
+        recorder = new MediaRecorder();
+
+        recorder.setPreviewDisplay(mSurfaceHolder.getSurface());
+        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+        //recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+
+
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_2_TS);
+        CamcorderProfile cpHigh = CamcorderProfile.get(CamcorderProfile.QUALITY_LOW);
         //recorder.setProfile(cpHigh);
         recorder.setOutputFile("/sdcard/videocapture_example.mp4");
         recorder.setMaxDuration(7000);
         recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
+
+        recorder.prepare();
+        recorder.start();
     }
 
 
