@@ -61,6 +61,7 @@ import static android.widget.Toast.LENGTH_SHORT;
  */
 public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
 
+    private static final String TAG = "(Debug) RecordFragment";
     private OnFragmentInteractionListener mListener;
     private SurfaceHolder mSurfaceHolder;
     private SurfaceView mSurfaceView;
@@ -78,6 +79,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     final static int REQUEST_VIDEO_CAPTURED = 1;
     String videoPath = "";
     FirebaseAuth mAuth;
+    FirebaseMethods mFirebaseMethods;
 
 
 
@@ -129,6 +131,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         aSwitch = view.findViewById(R.id.bt3);
 
         mAuth = FirebaseAuth.getInstance();
+        mFirebaseMethods = new FirebaseMethods(getContext());
 
 
 
@@ -384,6 +387,10 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(getContext(), "Your video has been uploaded!", Toast.LENGTH_LONG).show();
+                                        Log.d(TAG, "onComplete: calling incrememnt post!");
+                                        // Update posts
+                                        mFirebaseMethods.incrementPost();
+
                                     } else {
                                         Log.d("PAIGE", "error adding new video to database: " + task.getException());
                                     }
