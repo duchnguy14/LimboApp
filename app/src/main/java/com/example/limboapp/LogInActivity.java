@@ -182,7 +182,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.sign_in_button_google:
                 signInGoogle();
-//                goToMain(v);
+                goToMain(v);
                 break;
 
             // ...add a case for each sign in option (Google, Facebook, Twitter, etc)

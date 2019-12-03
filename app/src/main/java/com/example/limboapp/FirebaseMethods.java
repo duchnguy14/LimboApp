@@ -95,7 +95,7 @@ public class FirebaseMethods
 
 
     /*
-       Notes: Updates the username in the users node node in the database.
+       Notes: Updates the username in the users node in the database.
     */
     public void updateUsername(String username)
     {
@@ -106,6 +106,24 @@ public class FirebaseMethods
                 .child(mContext.getString(R.string.field_username)) // Notes: the username of the current user logged in
                 .setValue(username);
     }
+
+
+//    /*
+//       Notes: Updates the posts in the users node in the database.
+//    */
+//    public void addPost()
+//    {
+//        Long post_num =
+//
+//
+//
+//        Log.d(TAG, "addPost: incrementing post inside the users database!");
+//        myRef.child(mContext.getString(R.string.dbname_users))
+//                .child(userID) // Notes: Current User logged in
+//                .child(mContext.getString(R.string.field_posts)) // Notes: the posts of the current user logged in
+//                .setValue(username);
+//
+//    }
 
 
 

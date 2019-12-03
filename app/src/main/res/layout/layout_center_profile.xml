@@ -89,7 +89,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:text="Paige Riola"/>
+                    android:text=" "/>
 
                 <TextView
                     android:id="@+id/description"
@@ -98,16 +98,7 @@
                     android:layout_marginTop="5dp"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:text="Bio: "/>
-
-                <TextView
-                    android:id="@+id/website"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:text="This is a limbo"/>
+                    android:text=" "/>
 
             </LinearLayout>
 
