@@ -55,6 +55,7 @@ public class UserFragment extends Fragment
     // Notes: Variables:
     private Context mContext;
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private int mColumnCount = 3;
 
 
     // Notes: Firebase Variables
@@ -263,9 +264,18 @@ public class UserFragment extends Fragment
     public static UserFragment newInstance() {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, 1);
+        args.putInt(ARG_COLUMN_COUNT, 3);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+        }
     }
 
 
