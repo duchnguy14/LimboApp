@@ -25,8 +25,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -334,8 +339,30 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             Uri videoUri = data.getData();
             Log.d("PAIGE", "onActivityResult: uri = " + videoUri.getPath());
             File videoFile =  new File(getPath(videoUri));
-            StorageReference videoRef = FirebaseStorage.getInstance().getReference();
+            Uri file = Uri.fromFile(videoFile);
+            final StorageReference videoRef = FirebaseStorage.getInstance().getReference()
+                    .child(videoUri.getLastPathSegment());
+            UploadTask uploadTask = videoRef.putFile(file);
 
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("PAIGE", "onFailure: upload error: " + e);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    StorageMetadata metadata = taskSnapshot.getMetadata();
+                    //TODO: work here when merged
+                    Task<Uri> downloadUrl = videoRef.getDownloadUrl();
+                    downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String videoReference = uri.toString();
+                        }
+                    });
+                }
+            });
         }
     }
 
