@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -20,12 +21,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
+import static android.app.Activity.RESULT_OK;
 import static android.widget.Toast.LENGTH_SHORT;
 
 
@@ -54,7 +62,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     boolean recording = false;
     MediaRecorder recorder;
     final static int REQUEST_VIDEO_CAPTURED = 1;
-    String srcPath = "/storage/emulated/0/DCIM/Limbo/test";
+    String videoPath = "";
 
 
 
@@ -140,6 +148,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             public void onClick(View view) {
 
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                intent.putExtra("android.intent.extra.durationLimit",7);
                 startActivityForResult(intent,REQUEST_VIDEO_CAPTURED);
 //                try {
 //                    initRecorder();
@@ -318,4 +327,30 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            Uri videoUri = data.getData();
+            Log.d("PAIGE", "onActivityResult: uri = " + videoUri.getPath());
+            File videoFile =  new File(getPath(videoUri));
+            StorageReference videoRef = FirebaseStorage.getInstance().getReference();
+
+        }
+    }
+
+    private String getPath(Uri videoUri) {
+        String result;
+        Cursor cursor = getContext().getContentResolver().query(videoUri, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = videoUri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        Log.d("PAIGE", "getPath: result = " + result);
+        return result;
+    }
 }
