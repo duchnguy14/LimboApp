@@ -4,37 +4,50 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.hardware.Camera;
 import android.icu.util.ValueIterator;
-import android.media.CamcorderProfile;
+import android.media.Image;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.webkit.URLUtil;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.Switch;
 import android.widget.Toast;
-import android.widget.VideoView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
+import static android.app.Activity.RESULT_OK;
 import static android.widget.Toast.LENGTH_SHORT;
 
 
@@ -62,8 +75,10 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     View view;
     boolean recording = false;
     MediaRecorder recorder;
+    final static int REQUEST_VIDEO_CAPTURED = 1;
+    String videoPath = "";
+    FirebaseAuth mAuth;
 
-    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 10;
 
 
 
@@ -83,7 +98,15 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         RecordFragment fragment = new RecordFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+        File file = new File(Environment.DIRECTORY_PICTURES,"Limbo");
+        if(!file.exists()){
+            Log.d("DEBUG", "newInstance: mkdirs");
+            file.mkdirs();
+        }
+
+
         return fragment;
+
     }
 
     @Override
@@ -104,11 +127,15 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         mCapture = view.findViewById(R.id.bt1);
         //mRotate = view.findViewById(R.id.bt2);
         aSwitch = view.findViewById(R.id.bt3);
-        recorder = new MediaRecorder();
+
+        mAuth = FirebaseAuth.getInstance();
+
 
 
         if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA} , CAMERA_REQUEST_CODE);
+            Log.d("PAIGE", "onCreateView: HI");
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[] {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE} , CAMERA_REQUEST_CODE);
         } else {
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
@@ -132,11 +159,18 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
 
         mCapture.setOnClickListener(new View.OnClickListener() {
 
+
             public void onClick(View view) {
-                recorder = new MediaRecorder();
-                initRecorder();
 
-
+                Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                intent.putExtra("android.intent.extra.durationLimit",7);
+                startActivityForResult(intent,REQUEST_VIDEO_CAPTURED);
+                //TODO: publish activity?
+                //                try {
+//                    initRecorder();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -214,8 +248,10 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
           parameters  = camera.getParameters();
           camera.setDisplayOrientation(90);
           parameters.setPreviewFrameRate(30);
-          parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+          parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
           camera.setParameters(parameters);
+
+
         try {
             camera.setPreviewDisplay(surfaceHolder);
         } catch (IOException e) {
@@ -232,6 +268,9 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+        camera.stopPreview();
+        camera.release();
+
     }
 
 
@@ -266,15 +305,109 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             }
         }
     }
-    private void initRecorder() {
-        //recorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        recorder.setVideoSource(MediaRecorder.VideoSource.DEFAULT);
-        CamcorderProfile cpHigh = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
-        //recorder.setProfile(cpHigh);
-        recorder.setOutputFile("/sdcard/videocapture_example.mp4");
-        recorder.setMaxDuration(7000);
-        recorder.setMaxFileSize(5000000); // Approximately 5 megabytes
+//    private void initRecorder() throws IOException{
+//
+//        recorder = new MediaRecorder();
+//        recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+//       // recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+//
+//
+//        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+//        //recorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+//        recorder.setPreviewDisplay(mSurfaceHolder.getSurface());
+//        recorder.setOutputFile(srcPath);
+//        recorder.setMaxDuration(7000);
+//        recorder.setMaxFileSize(5000000);
+//        recorder.prepare();
+//        recorder.start();
+//    }
+//    protected void stopRecording() {
+//        recorder.stop();
+//        recorder.release();
+//        camera.release();
+//    }
+//
+//    private void releaseMediaRecorder(){
+//        if (recorder != null) {
+//            recorder.reset();
+//            recorder.release();
+//            recorder = null;
+//            camera.lock();
+//        }
+//    }
+
+    private void releaseCamera(){
+        if (camera != null){
+            camera.release();
+            camera = null;
+        }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            Uri videoUri = data.getData();
+            Log.d("PAIGE", "onActivityResult: uri = " + videoUri.getPath());
+            File videoFile =  new File(getPath(videoUri));
+            Uri file = Uri.fromFile(videoFile);
+            final StorageReference videoRef = FirebaseStorage.getInstance().getReference()
+                    .child(file.getLastPathSegment());
+            UploadTask uploadTask = videoRef.putFile(file);
 
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("PAIGE", "onFailure: upload error: " + e);
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    StorageMetadata metadata = taskSnapshot.getMetadata();
+
+                    //TODO: work here when merged
+                    Task<Uri> downloadUrl = videoRef.getDownloadUrl();
+                    downloadUrl.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String videoReference = uri.toString();
+                            Log.d("PAIGE", "onSuccess: videoReference = " + videoReference);
+                            Video video = new Video("My first video upload!",
+                                    videoReference,
+                                    mAuth.getCurrentUser().getDisplayName(),
+                                    mAuth.getCurrentUser().getPhotoUrl().toString().replace("s96-c", "s400-c"),
+                                    mAuth.getCurrentUser().getUid(),0);
+                            DatabaseReference videoDataRef = FirebaseDatabase.getInstance().getReference().child("videos");
+
+                            videoDataRef.push().setValue(video).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getContext(), "Your video has been uploaded!", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Log.d("PAIGE", "error adding new video to database: " + task.getException());
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    private String getPath(Uri videoUri) {
+        String result;
+        Cursor cursor = getContext().getContentResolver().query(videoUri, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = videoUri.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        Log.d("PAIGE", "getPath: result = " + result);
+        return result;
+    }
 }

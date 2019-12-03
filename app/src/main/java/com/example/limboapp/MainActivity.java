@@ -44,7 +44,11 @@ public class MainActivity extends AppCompatActivity
 
         loadFragment(new HomeFragment());
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+            requestPermissions(new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_CAMERA_REQUEST_CODE);
         }
 
     }
