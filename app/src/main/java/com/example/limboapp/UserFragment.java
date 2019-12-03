@@ -186,7 +186,7 @@ public class UserFragment extends Fragment
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 //        myRef = mFirebaseDatabase.getReference();
-        myRef = mFirebaseDatabase.getReference(String.valueOf(R.string.dbname_users));
+        myRef = mFirebaseDatabase.getReference("users");
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -206,8 +206,8 @@ public class UserFragment extends Fragment
                 }
             }
         };
-        
 
+//        myRef = myRef.child(mAuth.getCurrentUser().getUid());
 
         Log.d(TAG, "setupFirebaseAuth: About to read and write from DB");
 
@@ -227,7 +227,7 @@ public class UserFragment extends Fragment
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.d(TAG, "onCancelled: Failllllled " + databaseError.toString());
             }
         });
 

@@ -288,62 +288,67 @@ public class FirebaseMethods
         // Notes: Loops thru the main nodes: user_account_settings & users
         for(DataSnapshot ds: dataSnapshot.getChildren())
         {
-
             // Notes: user node
-            if(ds.getKey().equals(mContext.getString(R.string.dbname_users)))
+            if(ds.getKey().equals(mAuth.getCurrentUser().getUid()))
             {
                 Log.d(TAG, "getUserAccountSettings: user_account_settings datasnapshot: " + ds);
 
                 // Notes: Try-Catch for possible null fields
-                try {
-                    // Notes: Setting values from user_account_settings node into object settings
-                    user.setDescription(
-                            ds.child(userID)
-                                    .getValue(User.class)
-                                    .getDescription()
-                    );
+//                try {
+//                    // Notes: Setting values from user_account_settings node into object settings
+//                    user.setDescription(
+//                            ds.child(userID)
+//                                    .getValue(User.class)
+//                                    .getDescription()
+//                    );
+//
+//                    user.setDisplay_name(
+//                            ds.child(userID)
+//                                    .getValue(User.class)
+//                                    .getDisplay_name()
+//                    );
+//
+//                    user.setFollowers(
+//                            ds.child(userID)
+//                                    .getValue(User.class)
+//                                    .getFollowers()
+//                    );
+//
+//                    user.setFollowing(
+//                            ds.child(userID)
+//                                    .getValue(User.class)
+//                                    .getFollowing()
+//                    );
+//
+//                    user.setPosts(
+//                            ds.child(userID)
+//                                    .getValue(User.class)
+//                                    .getPosts()
+//                    );
+//
+//                    user.setIconUrl(
+//                            ds.child(userID)
+//                                    .getValue(User.class)
+//                                    .getIconUrl()
+//                    );
+//
+//                    user.setUsername(
+//                            ds.child(userID)
+//                                    .getValue(User.class)
+//                                    .getUsername()
+//                    );
+//
+//
+//                    Log.d(TAG, "getUser: retrieved user information: " + user.toString());
+//                } catch (Exception e) {
+//                    Log.e(TAG, "getUser: NullPointerException: " + e.getMessage());
+//                }
 
-                    user.setDisplay_name(
-                            ds.child(userID)
-                                    .getValue(User.class)
-                                    .getDisplay_name()
-                    );
 
-                    user.setFollowers(
-                            ds.child(userID)
-                                    .getValue(User.class)
-                                    .getFollowers()
-                    );
-
-                    user.setFollowing(
-                            ds.child(userID)
-                                    .getValue(User.class)
-                                    .getFollowing()
-                    );
-
-                    user.setPosts(
-                            ds.child(userID)
-                                    .getValue(User.class)
-                                    .getPosts()
-                    );
-
-                    user.setIconUrl(
-                            ds.child(userID)
-                                    .getValue(User.class)
-                                    .getIconUrl()
-                    );
-
-                    user.setUsername(
-                            ds.child(userID)
-                                    .getValue(User.class)
-                                    .getUsername()
-                    );
+                Log.d(TAG, "getUser: DSSSS: " + ds.toString());
+                user = ds.getValue(User.class);
 
 
-                    Log.d(TAG, "getUser: retrieved user information: " + user.toString());
-                } catch (Exception e) {
-                    Log.e(TAG, "getUser: NullPointerException: " + e.getMessage());
-                }
             }
 
 
