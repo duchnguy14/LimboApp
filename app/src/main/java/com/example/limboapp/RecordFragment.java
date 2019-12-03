@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.hardware.Camera;
+import android.icu.util.ValueIterator;
+import android.media.Image;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.webkit.URLUtil;
+import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -155,7 +160,8 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                 intent.putExtra("android.intent.extra.durationLimit",7);
                 startActivityForResult(intent,REQUEST_VIDEO_CAPTURED);
-//                try {
+                //TODO: publish activity?
+                //                try {
 //                    initRecorder();
 //                } catch (IOException e) {
 //                    e.printStackTrace();

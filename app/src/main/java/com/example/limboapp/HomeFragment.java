@@ -3,17 +3,27 @@ package com.example.limboapp;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.limboapp.dummy.DummyContent;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -23,11 +33,17 @@ import com.example.limboapp.dummy.DummyContent.DummyItem;
  */
 public class HomeFragment extends Fragment {
 
+    private static final String TAG = "(Debug) HomeFragment";
+
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
+    private OnListFragmentInteractionListener listener;
+    private Context context;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -57,20 +73,25 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
+        Log.d(TAG, "onCreateView: called");
         View view = inflater.inflate(R.layout.fragment_home_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyHomeRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
+        context = getContext();
+
+        RecyclerView news_feed_ListView = view.findViewById(R.id.news_feed_listView);
+
+        MyHomeRecyclerViewAdapter adapter = new MyHomeRecyclerViewAdapter(context, listener);
+
+        news_feed_ListView.setAdapter(adapter);
+
+        news_feed_ListView.setLayoutManager(new LinearLayoutManager(context,
+                LinearLayoutManager.VERTICAL, false));
+
+        PagerSnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(news_feed_ListView);
+
         return view;
     }
 
@@ -79,7 +100,7 @@ public class HomeFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+            listener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -89,7 +110,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        listener = null;
     }
 
     /**

@@ -1,0 +1,68 @@
+<!-- Note: Layout file going to be on top of
+               the activity_account_settings.-->
+
+<!-- Notes: Snippets are what's put inside a layout.
+        This xml contains top username and settings icon for
+            userprofile activity
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/white_limbogreen_border_bottom"
+        >
+
+        <!-- Notes:
+                Need to give toolbar an ID because we need to reference it
+                    to add a menu onto it. -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profileToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <!--  Notes: Possibly need to centerVertical = true?
+                               But i already think it is-->
+                <ImageView
+                    android:id="@+id/backArrow"
+                    android:src="@drawable/ic_back_arrow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"/>
+
+                <TextView
+                    android:id="@+id/profileName"
+                    android:layout_toRightOf="@+id/backArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Preferences"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="5dp"/>
+
+
+
+
+
+
+
+
+
+
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+
+</merge>

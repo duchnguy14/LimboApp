@@ -1,0 +1,56 @@
+<!-- Notes: Snippets are what's put inside a layout.
+        This xml contains top username and settings icon for
+            userprofile activity
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/white_limbogreen_border_bottom"
+        >
+
+        <!-- Notes:
+                Need to give toolbar an ID because we need to reference it
+                    to add a menu onto it. -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profileToolBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="paige.riola"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="15dp"/>
+
+                <!--  Notes: Possibly need to centerVertical = true?
+                                But i already think it is-->
+                <ImageView
+                    android:id="@+id/profileMenu"
+                    android:src="@drawable/ic_menu"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="20dp"/>
+
+
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+
+</merge>

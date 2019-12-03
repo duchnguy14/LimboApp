@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Notes: This xml is for the account setting
+                that will be accessible by the menu
+                from the userprofile > snippet_top+profilebar-->
+
+<!-- Notes: Will be using coordinatorlayout because
+                we will be using a viewpager for fragments-->
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Notes: Our Viewpager to display fragments-->
+    <include layout="@layout/layout_center_viewpager"/>
+
+
+
+    <!-- Notes: Used to hold the entire content. We can
+                    reuse ID's in layouts as long as they're
+                    in different layouts. -->
+    <RelativeLayout
+        android:id="@+id/relLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Notes: Toolbar will go into here      -->
+        <RelativeLayout
+            android:id="@+id/relLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/snippet_top_accountsettingtoolbar"/>
+
+        </RelativeLayout>
+
+        <!-- Notes: Sits above the bottom navbar-->
+        <RelativeLayout
+            android:id="@id/relLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/relLayout2"
+            android:layout_marginBottom="50dp">
+
+            <include layout="@layout/layout_center_account_settings"/>
+
+        </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
