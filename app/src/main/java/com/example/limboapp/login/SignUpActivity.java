@@ -1,4 +1,4 @@
-package com.example.limboapp;
+package com.example.limboapp.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,7 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import java.util.regex.*;
+import com.example.limboapp.R;
+import com.example.limboapp.home.MainActivity;
 
 public class SignUpActivity extends AppCompatActivity implements Button.OnClickListener, TextWatcher{
 

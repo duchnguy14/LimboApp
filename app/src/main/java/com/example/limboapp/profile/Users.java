@@ -1,4 +1,4 @@
-package com.example.limboapp;
+package com.example.limboapp.profile;
 
 import java.util.ArrayList;
 

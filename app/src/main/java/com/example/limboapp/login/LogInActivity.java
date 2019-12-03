@@ -1,4 +1,4 @@
-package com.example.limboapp;
+package com.example.limboapp.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,12 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.appevents.AppEvent;
+import com.example.limboapp.home.MainActivity;
+import com.example.limboapp.R;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -31,9 +32,20 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
-public class LogInActivity extends AppCompatActivity implements View.OnClickListener{
+public class LogInActivity extends AppCompatActivity implements View.OnClickListener
+{
 
-    private static final String TAG = "LogInActivity";
+    // ***************************************************************************************
+    // *********************************NOTES: Variables *********************************
+    // ***************************************************************************************
+
+    // Notes: Debug Tools
+    private static final String TAG = "(Debug) LogInActivity";
+
+    // Notes: XML References
+    private TextView mPleaseWait;
+    private ProgressBar mProgressBar;
+
 
     private static final int RC_SIGN_IN_GOOGLE = 9001;
 
@@ -47,10 +59,23 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     TwitterLoginButton signInButtonTwitter;
     LoginButton signInButtonFacebook;
 
+
+
+    // ***************************************************************************************
+    // *********************************NOTES: MAIN METHOD *********************************
+    // ***************************************************************************************
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         Log.i("DEBUG:", "Inside of LogInActivity");
         super.onCreate(savedInstanceState);
+
+
+
+
+
+
 
         // Configure Google sign-in to request the user's ID, email address, and basic profile.
         // ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -68,10 +93,19 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         // Build FireBaseAuth to accept SignIn info
         mAuth = FirebaseAuth.getInstance();
 
+
+        // Notes: XML References
+        mPleaseWait = (TextView) findViewById(R.id.pleaseWait);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+
+
+        mPleaseWait.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.GONE);
+
         // Get sign in buttons
         signInButtonGoogle = findViewById(R.id.sign_in_button_google);
-        signInButtonTwitter = findViewById(R.id.sign_in_button_twitter);
-        signInButtonFacebook = findViewById(R.id.sign_in_button_facebook);
+
 
         // Google
         // Set on click listener
@@ -84,20 +118,26 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         AppEventsLogger.activateApp(this.getApplication());
     }
 
-    public void goToMain(View view) {
+
+
+    // ***************************************************************************************
+    // *********************************NOTES: HELPER METHOD *********************************
+    // ***************************************************************************************
+
+
+
+
+    public void goToMain(View view)
+    {
         intent = new Intent(getApplicationContext(), MainActivity.class);
 
         startActivity(intent);
     }
 
-    public void goToSignUp(View view) {
-        intent = new Intent(getApplicationContext(), SignUpActivity.class);
-
-        startActivity(intent);
-    }
 
     @Override
-    protected void onStart() {
+    protected void onStart()
+    {
         // Check for existing Firebase Sign In account, if the user is already signed in
         // the FirebaseUser will be non-null.
         FirebaseUser account = mAuth.getCurrentUser();
@@ -105,12 +145,19 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
     }
 
+
+
+    // ***************************************************************************************
+    // *********************************NOTES: FIREBASE METHOD *********************************
+    // ***************************************************************************************
+
     private void updateUI(FirebaseUser account) {
         if(account != null){
             // if an account already exists, direct the user to the main activity
             if(newUser) {
                 // if this is the first time the user is using the app, send them to sign up activity
-                goToSignUp(findViewById(android.R.id.content).getRootView());
+//                goToSignUp(findViewById(android.R.id.content).getRootView());
+                Log.d(TAG, "updateUI: NEW USER ALERT...need to sign up");
             }
             else {
                 // else, take user to main activity
@@ -123,7 +170,11 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
+        mPleaseWait.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+
         switch (v.getId()) {
             case R.id.sign_in_button_google:
 //                signInGoogle();

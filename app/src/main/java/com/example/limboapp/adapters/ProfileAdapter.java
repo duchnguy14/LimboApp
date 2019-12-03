@@ -1,4 +1,4 @@
-package com.example.limboapp;
+package com.example.limboapp.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.VideoView;
+
+import com.example.limboapp.R;
 
 import java.util.ArrayList;
 

@@ -1,17 +1,15 @@
-package com.example.limboapp;
+package com.example.limboapp.adapters;
 
 import android.content.Context;
-import android.media.Image;
-import android.nfc.Tag;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
+
+import com.example.limboapp.R;
+import com.example.limboapp.profile.Users;
 
 import java.util.ArrayList;
 

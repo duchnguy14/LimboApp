@@ -1,4 +1,4 @@
-package com.example.limboapp;
+package com.example.limboapp.adapters;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -7,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.limboapp.HomeFragment.OnListFragmentInteractionListener;
+import com.example.limboapp.R;
+import com.example.limboapp.profile.UserFragment.OnListFragmentInteractionListener;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
 
 import java.util.List;
@@ -17,12 +18,12 @@ import java.util.List;
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecyclerViewAdapter.ViewHolder> {
+public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecyclerViewAdapter.ViewHolder> {
 
     private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyHomeRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyUserRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -30,7 +31,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_home, parent, false);
+                .inflate(R.layout.fragment_user, parent, false);
         return new ViewHolder(view);
     }
 

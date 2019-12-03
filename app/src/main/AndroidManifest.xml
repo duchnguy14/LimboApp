@@ -22,16 +22,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".home.MainActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".ForgotInfoActivity"
+            android:name=".login.ForgotInfoActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".login.SignUpActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" /> <!-- **Default Starting Activity** -->
         <!-- <activity android:name=".MainActivity"> -->
@@ -41,7 +41,7 @@
         <!-- </intent-filter> -->
         <!-- </activity> -->
         <activity
-            android:name=".LogInActivity"
+            android:name=".login.LogInActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -50,6 +50,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

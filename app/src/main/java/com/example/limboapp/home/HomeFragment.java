@@ -1,16 +1,19 @@
-package com.example.limboapp;
+package com.example.limboapp.home;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
+import com.example.limboapp.R;
+import com.example.limboapp.profile.Users;
+import com.example.limboapp.adapters.CustomAdapter;
 import com.example.limboapp.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
@@ -21,7 +24,9 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class UserFragment extends Fragment {
+public class HomeFragment extends Fragment {
+
+    private static final String TAG = "(Debug) HomeFragment";
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -33,13 +38,13 @@ public class UserFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public UserFragment() {
+    public HomeFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static UserFragment newInstance() {
-        UserFragment fragment = new UserFragment();
+    public static HomeFragment newInstance() {
+        HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, 1);
         fragment.setArguments(args);
@@ -57,32 +62,40 @@ public class UserFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_list, container, false);
+                             Bundle savedInstanceState)
+    {
+        Log.d(TAG, "onCreateView: called");
+        View view = inflater.inflate(R.layout.fragment_home_list, container, false);
 
+
+        ArrayList<Users> usersList = new ArrayList<Users>();
         ArrayList<String> vidList = new ArrayList<String>();
         String video1 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
-        String video2 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
-        String video3 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.stonefalls;
+        String video2 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.launch;
+        String video3 = "android.resource://" + MainActivity.PACKAGE_NAME + "/" + R.raw.boat;
         vidList.add(video1);
         vidList.add(video2);
         vidList.add(video3);
 
-
-        Users user1 = new Users("Paige", vidList);
-
-
-        ListView listView = (ListView) view.findViewById(R.id.profile_feed_listView);
-        TextView username = (TextView) view.findViewById(R.id.username_frag_textview);
-
-        username.setText(user1.getUsername());
-
-        ProfileAdapter profileAdapter = new ProfileAdapter(getContext(), R.layout.custom_profile, user1.getVideos());
-
-        listView.setAdapter(profileAdapter);
+        Users user1 = new Users("Duc", vidList);
+        Users user2 = new Users("Paige", vidList);
+        Users user3 = new Users("Dara", vidList);
 
 
-        // Set the adapter
+        usersList.add(user1);
+        usersList.add(user2);
+        usersList.add(user3);
+
+        ListView news_feed_ListView = (ListView) view.findViewById(R.id.news_feed_listView);
+
+//        CustomAdapter adapter = new CustomAdapter(getContext(), R.layout.custom_row, usersList);
+        CustomAdapter adapter = new CustomAdapter(getContext(), R.layout.user_post, usersList);
+
+        news_feed_ListView.setAdapter(adapter);
+
+
+
+//         Set the adapter
 //        if (view instanceof RecyclerView) {
 //            Context context = view.getContext();
 //            RecyclerView recyclerView = (RecyclerView) view;
@@ -91,10 +104,8 @@ public class UserFragment extends Fragment {
 //            } else {
 //                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
 //            }
-//            recyclerView.setAdapter(new MyUserRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+//            recyclerView.setAdapter(new MyHomeRecyclerViewAdapter(DummyContent.ITEMS, mListener));
 //        }
-
-
 
         return view;
     }

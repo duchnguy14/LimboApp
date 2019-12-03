@@ -1,12 +1,9 @@
-package com.example.limboapp;
+package com.example.limboapp.share;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
-import android.icu.util.ValueIterator;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,20 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
-import android.widget.MediaController;
 import android.widget.Toast;
-import android.widget.VideoView;
 
-import java.io.File;
+import com.example.limboapp.R;
+
 import java.io.IOException;
 
 
