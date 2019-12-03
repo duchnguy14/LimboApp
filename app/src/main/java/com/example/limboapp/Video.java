@@ -8,6 +8,7 @@ public class Video {
     private String path;
     private String username;
     private String iconUrl;
+    private String uid;
     //gets username, uid, and iconUrl from user
     private int likes;
 
@@ -15,20 +16,40 @@ public class Video {
 
     }
 
-    public Video(String key, String description, String path, String username, String iconUrl, int likes) {
+//    public Video(String key, String description, String path, String username, String iconUrl, int likes) {
+//        this.key = key;
+//        this.description = description;
+//        this.path = path;
+//        this.username = username;
+//        this.iconUrl = iconUrl;
+//        this.likes = likes;
+//
+//        Log.d("Video", "Video data:\nkey = " + key
+//            + "\ndescription = " + description
+//            + "\npath = " + path
+//            + "\nusername = " + username
+//            + "\niconUrl = " + iconUrl
+//            + "\nlikes" + likes
+//        );
+//    }
+
+
+    public Video(String key, String description, String path, String username, String iconUrl, String uid, int likes) {
         this.key = key;
         this.description = description;
         this.path = path;
         this.username = username;
         this.iconUrl = iconUrl;
+        this.uid = uid;
         this.likes = likes;
 
+
         Log.d("Video", "Video data:\nkey = " + key
-            + "\ndescription = " + description
-            + "\npath = " + path
-            + "\nusername = " + username
-            + "\niconUrl = " + iconUrl
-            + "\nlikes" + likes
+                + "\ndescription = " + description
+                + "\npath = " + path
+                + "\nusername = " + username
+                + "\niconUrl = " + iconUrl
+                + "\nlikes" + likes
         );
     }
 
@@ -49,6 +70,15 @@ public class Video {
     public void setIconUrl(String iconUrl) { this.iconUrl = iconUrl; }
 
     public String getPath() { return path; }
+
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public void setPath(String path) { this.path = path; }
 

@@ -131,6 +131,13 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
     }
 
+    public void goToSignUp(View view)
+    {
+        intent = new Intent(getApplicationContext(), SignUpActivity.class);
+
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onStart()
@@ -153,7 +160,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             // if an account already exists, direct the user to the main activity
             if(newUser) {
                 // if this is the first time the user is using the app, send them to sign up activity
-//                goToSignUp(findViewById(android.R.id.content).getRootView());
+                goToSignUp(findViewById(android.R.id.content).getRootView());
                 Log.d(TAG, "updateUI: NEW USER ALERT...need to sign up");
             }
             else {

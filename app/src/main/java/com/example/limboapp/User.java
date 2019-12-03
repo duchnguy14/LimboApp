@@ -27,7 +27,7 @@ public class User {
     }
 
 
-    public User(String username, String iconUrl, String description, String display_name, long followers, long following, long posts) {
+    public User(String username, String iconUrl, String description, String display_name, long followers, long following, long posts, String uid) {
         this.username = username;
         this.iconUrl = iconUrl;
         this.description = description;
@@ -35,6 +35,7 @@ public class User {
         this.followers = followers;
         this.following = following;
         this.posts = posts;
+        this.uid = uid;
     }
 
     public String getUid() { return uid; }

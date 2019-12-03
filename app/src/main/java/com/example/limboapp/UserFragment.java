@@ -94,6 +94,7 @@ public class UserFragment extends Fragment
 
         // Notes: Variables
         mContext = getActivity();
+        Log.d(TAG, "onCreateView: This is the Context: " + mContext);
 
 
         // Notes: Firebase Variables
