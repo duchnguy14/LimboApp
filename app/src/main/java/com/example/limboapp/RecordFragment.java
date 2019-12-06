@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.hardware.Camera;
-import android.icu.util.ValueIterator;
-import android.media.Image;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,9 +18,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.webkit.URLUtil;
-import android.widget.ImageView;
-import android.widget.MediaController;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,8 +39,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import static android.app.Activity.RESULT_OK;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -59,6 +52,11 @@ import static android.widget.Toast.LENGTH_SHORT;
  * Use the {@link RecordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+/**
+ * We decided to leave Dara's internal camera recording code in here even if it wasn't implemented
+ * just to show what he was working on
+ */
 public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
 
     private static final String TAG = "(Debug) RecordFragment";
@@ -66,18 +64,12 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     private SurfaceHolder mSurfaceHolder;
     private SurfaceView mSurfaceView;
     final  int CAMERA_REQUEST_CODE = 1;
-    int camBackId = Camera.CameraInfo.CAMERA_FACING_BACK;
-    int camFrontId = Camera.CameraInfo.CAMERA_FACING_FRONT;
-    ImageView mRotate;
     ImageView mCapture;
     Camera camera;
     ImageView aSwitch;
     boolean isFlashOn = false;
     View view;
-    boolean recording = false;
-    MediaRecorder recorder;
     final static int REQUEST_VIDEO_CAPTURED = 1;
-    String videoPath = "";
     FirebaseAuth mAuth;
     FirebaseMethods mFirebaseMethods;
 
@@ -127,7 +119,6 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         mSurfaceView = view.findViewById(R.id.videoview);
         mSurfaceHolder = mSurfaceView.getHolder();
         mCapture = view.findViewById(R.id.bt1);
-        //mRotate = view.findViewById(R.id.bt2);
         aSwitch = view.findViewById(R.id.bt3);
 
         mAuth = FirebaseAuth.getInstance();
@@ -168,12 +159,6 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
                 intent.putExtra("android.intent.extra.durationLimit",7);
                 startActivityForResult(intent,REQUEST_VIDEO_CAPTURED);
-                //TODO: publish activity?
-                //                try {
-//                    initRecorder();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -214,10 +199,6 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         }
 
 
-    }
-
-
-    private void captureVideo() {
     }
 
     // TODO: Rename method, update argument and hook method into UI event

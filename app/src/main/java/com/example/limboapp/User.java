@@ -1,7 +1,5 @@
 package com.example.limboapp;
 
-import java.util.List;
-
 public class User {
     private String username, iconUrl, uid;
 

@@ -17,7 +17,6 @@ public class PublishVideo extends AppCompatActivity {
     EditText inputDescription;
 
     String description;
-    String path;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {

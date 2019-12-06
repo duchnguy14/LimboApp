@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.limboapp.RecordFragment;
 import com.example.limboapp.dummy.DummyContent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.nostra13.universalimageloader.core.ImageLoader;

@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecyclerViewAdapter.ViewHolder> {
 
     private final String TAG = "MyHomeRecyclerViewAdapter";
-    private FirebaseAuth mAuth;
 
     private Context context;
     private View view;

@@ -28,11 +28,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.*;
-
 public class SignUpActivity extends AppCompatActivity implements Button.OnClickListener, TextWatcher{
 
     static final String TAG = "(Debug) SignUpActivity";
@@ -43,9 +38,7 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
     Intent intent = null;
     FirebaseAuth mAuth;
     FirebaseUser user;
-    DatabaseReference usersRef, hopperRef;
-    private FirebaseMethods mFirebaseMethods;
-    Map<String, Object> hopperUpdates;
+    DatabaseReference usersRef;
     UserProfileChangeRequest profileUpdates;
     String username, iconUrl;
 
@@ -95,7 +88,7 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
         finish();
     }
 
-    // TextWatcher methods
+    // TextWatcher methods that check user input
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -135,10 +128,6 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
             return false;
         }
     }
-
-
-
-
 
 
     /*
@@ -201,33 +190,24 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
                         usersRef = FirebaseDatabase.getInstance().getReference().child("users");
 
                         usersRef.child(mAuth.getCurrentUser().getUid()).setValue(newUser)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            //go to main upon confirming success
-                                            Log.d(TAG, "successfully added new user to database");
-                                            goToMain();
-                                        } else {
-                                            Log.d(TAG, "error adding new user to database: " + task.getException());
-                                        }
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        //go to main upon confirming success
+                                        Log.d(TAG, "successfully added new user to database");
+                                        goToMain();
+                                    } else {
+                                        Log.d(TAG, "error adding new user to database: " + task.getException());
                                     }
-                                });
-
+                                }
+                           });
                     }
                     else
                     {
-
-
                         Toast.makeText(SignUpActivity.this, "That username already exists.", Toast.LENGTH_SHORT).show();
                         flag++;
-
-
                     }
-                // Notes: singleSnapshot is a single item from database
-
-//                    Toast.makeText(SignUpActivity.this, "That username already exists.", Toast.LENGTH_SHORT).show();
-//                    Log.d(TAG, "onDataChange: That username already exists.");
                 }
 
                 @Override
@@ -237,9 +217,4 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
             });
         }
     }
-
-
-
-
-
 }
