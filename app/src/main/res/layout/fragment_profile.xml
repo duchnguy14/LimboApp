@@ -10,8 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!--   Notes: Top toolbar: Username and menu icon     -->
-        <!--        <include layout="@layout/snippet_top_profilebar"/>-->
 
         <!--   Notes: Top toolbar: Username and menu icon     -->
         <include layout="@layout/snippet_top_profilebar"/>

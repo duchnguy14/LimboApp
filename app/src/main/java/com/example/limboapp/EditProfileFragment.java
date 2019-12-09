@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-//public class EditProfileFragment extends Fragment implements ConfirmPasswordDialog.OnConfirmPasswordListener{
 public class EditProfileFragment extends Fragment
 {
 
@@ -34,15 +32,13 @@ public class EditProfileFragment extends Fragment
 
     // Notes: XML References
     private CircleImageView mProfilePhoto;
-    private EditText mDisplayName, mUsername, mDescription, mEmail, mPhoneNumber;
-    private TextView mChangeProfilePhoto;
+    private EditText mDisplayName, mUsername, mDescription;
 
 
     // Notes: Firebase Variables
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String userID;
-    // Notes: NAME CHANGE: mFirebaseDatabase = database
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
@@ -50,118 +46,6 @@ public class EditProfileFragment extends Fragment
 
     // Notes: Variables
     private User mUser;
-
-
-    // Notes: Interface Methods Implementations
-
-
-//    @Override
-//    public void onConfirmPassword(String password)
-//    {
-//        Log.d(TAG, "onConfirmPassword: got the password: " + password);
-//
-//        /*
-//            Notes: From Firebase Documentation:
-//                Get auth credentials from the user for re-authentication. The example below shows
-//                email and password credentials but there are multiple possible providers,
-//                such as GoogleAuthProvider or FacebookAuthProvider.
-//
-//         */
-//
-//        AuthCredential credential = EmailAuthProvider
-//                .getCredential(mAuth.getCurrentUser().getEmail(), password);
-//
-//        /*
-//            Notes:
-//                Prompt the user to re-provide their sign-in credentials
-//         */
-//        mAuth.getCurrentUser().reauthenticate(credential)
-//                .addOnCompleteListener(new OnCompleteListener<Void>()
-//                {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task)
-//                    {
-//                        if(task.isSuccessful() == true)
-//                        {
-//                            Log.d(TAG, "User re-authenticated.");
-//
-//                            /*
-//                                Notes:
-//                                    check to see if the email is not already present in the database (Is this email in use?)
-//                             */
-//                            mAuth.fetchSignInMethodsForEmail(mEmail.getText().toString()).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>()
-//                            {
-//                                @Override
-//                                public void onComplete(@NonNull Task<SignInMethodQueryResult> task)
-//                                {
-//                                    if(task.isSuccessful() == true)
-//                                    {
-//                                        try
-//                                        {
-//                                            /*
-//                                                Notes:
-//                                                    We retrieved something because size = 1.
-//                                                    Email is already in use.
-//                                             */
-//                                            if(task.getResult().getSignInMethods().size() == 1)
-//                                            {
-//                                                Log.d(TAG, "onComplete: that email is already in use.");
-//                                                Toast.makeText(getActivity(), "That email is already in use", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                            /*
-//                                                Notes: size is null if there's 0 retrieved...email is available.
-//                                             */
-//                                            else
-//                                            {
-//                                                Log.d(TAG, "onComplete: That email is available.");
-//
-//                                                // Notes: Update to the new available email
-//                                                mAuth.getCurrentUser().updateEmail(mEmail.getText().toString())
-//                                                        .addOnCompleteListener(new OnCompleteListener<Void>()
-//                                                        {
-//                                                            @Override
-//                                                            public void onComplete(@NonNull Task<Void> task)
-//                                                            {
-//                                                                if (task.isSuccessful())
-//                                                                {
-//                                                                    Log.d(TAG, "User email address updated.");
-//                                                                    Toast.makeText(getActivity(), "email updated", Toast.LENGTH_SHORT).show();
-//
-//                                                                    /*
-//                                                                        Notes:
-//                                                                            so now the email is updated in authentication,
-//                                                                                this method will update it in database.
-//                                                                     */
-//                                                                    mFirebaseMethods.updateEmail(mEmail.getText().toString());
-//                                                                }
-//                                                            }
-//                                                        });
-//                                            }
-//                                        }
-//                                        catch (NullPointerException e)
-//                                        {
-//                                            Log.e(TAG, "onComplete: NullPointerException: "  +e.getMessage() );
-//                                        }
-//                                    }
-//                                }
-//                            });
-//
-//
-//
-//                        }
-//                        else
-//                        {
-//                            Log.d(TAG, "onComplete: re-authentication failed.");
-//                        }
-//
-//                    }
-//                });
-//    }
-
-
-
-
-
 
     @Nullable
     @Override
@@ -216,7 +100,7 @@ public class EditProfileFragment extends Fragment
     /*
         Notes:
             Retrieves the data contained in the widgets and saves it to the database.
-            Need to remember...username and email chosen must be unique!
+            Need to remember...username chosen must be unique!
      */
     private void saveProfileSettings()
     {
@@ -226,30 +110,39 @@ public class EditProfileFragment extends Fragment
         final String description = mDescription.getText().toString();
 
 
-
-        // Notes: case1 - User made a change to their username
-        if(!mUser.getUsername().equals(username))
+        if(username.length() != 0)
         {
-            checkIfUsernameExists(username);
+            // Notes: case1 - User made a change to their username
+            if(!mUser.getUsername().equals(username))
+            {
+                checkIfUsernameExists(username);
+            }
         }
 
+
         /*
-            Notes: Case 3 - 6
+            Notes: Case 2 & 3
                 changing the rest of the settings that do not require uniqueness
          */
 
         // Notes: update displayname
-        if(!mUser.getDisplay_name().equals(displayName))
+        if(displayName.length() != 0)
         {
-            mFirebaseMethods.updateUserAccountSettings(displayName, null, null, 0);
+            if(!mUser.getDisplay_name().equals(displayName))
+            {
+                mFirebaseMethods.updateUserAccountSettings(displayName, null, null);
+            }
         }
 
-        // Notes: update description
-        if(!mUser.getDescription().equals(description))
-        {
-            mFirebaseMethods.updateUserAccountSettings(null, null, description, 0);
-        }
 
+        if(description.length() != 0)
+        {
+            // Notes: update description
+            if(!mUser.getDescription().equals(description))
+            {
+                mFirebaseMethods.updateUserAccountSettings(null, null, description);
+            }
+        }
     }
 
 
@@ -264,10 +157,11 @@ public class EditProfileFragment extends Fragment
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
+
         // Notes: Querying inside of the users node...searching for the username if it exists
         Query query = reference
-                .child(getString(R.string.dbname_users)) // Notes: looking for the node that contains the object we're looking for
-                .orderByChild(getString(R.string.field_username)) // Notes: looking for the field inside that object
+                .child("users")
+                .orderByChild(getString(R.string.field_username))
                 .equalTo(username);
 
 
@@ -281,7 +175,7 @@ public class EditProfileFragment extends Fragment
                 if(dataSnapshot.exists() == false){
                     //Notes: add the username if not found
                     mFirebaseMethods.updateUsername(username);
-                    Toast.makeText(getActivity(), "saved username.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), " saved username.", Toast.LENGTH_SHORT).show();
 
                 }
                 // Notes: singleSnapshot is a single item from database
@@ -304,25 +198,29 @@ public class EditProfileFragment extends Fragment
 
 
 
-    private void setProfileWidgets(User user_param)
-    {
+    private void setProfileWidgets(User user_param) {
         Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + user_param.toString());
 
         mUser = user_param;
 
-        // Notes: Don't think i need this object anymore.
-//        User user = user_param.getUser();
-//        UserAccountSettings settings = user_param.getSettings();
+        if(user_param.getIconUrl() != null)
+        {
+            UniversalImageLoader.setImage(user_param.getIconUrl(), mProfilePhoto, null, "");
+        }
 
-        UniversalImageLoader.setImage(user_param.getIconUrl(), mProfilePhoto, null, "");
+        if(user_param.getUsername() != null)
+        {
+            mUsername.setText(user_param.getUsername());
+        }
 
-        mUsername.setText(user_param.getUsername());
-        mDisplayName.setText(user_param.getDisplay_name());
-        mDescription.setText(user_param.getDescription());
-
-
-
-
+        if(user_param.getDisplay_name() != null)
+        {
+            mDisplayName.setText(user_param.getDisplay_name());
+        }
+        if(user_param.getDescription() != null)
+        {
+            mDescription.setText(user_param.getDescription());
+        }
     }
 
 
@@ -362,14 +260,14 @@ public class EditProfileFragment extends Fragment
                 }
                 else
                 {
-                    // Notes: User is signed out
+                    // Notes: User is signved out
                     Log.d(TAG, "\tsetupFirebaseAuth() > onAuthStateChanged: signed out");
                 }
             }
         };
 
 
-        /*
+        /* ◊
             Notes:
                 Allows us to get the dataSnapshot to either read or write to database.
                 This listener always listens

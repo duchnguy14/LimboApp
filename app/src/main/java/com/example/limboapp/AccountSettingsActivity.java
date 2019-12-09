@@ -45,9 +45,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         // Notes: Setting up fragment list
         setUpFragments();
 
-//        // Notes: Get Incoming Intent if there is one
-//        getIncomingIntent();
-
         // Notes: Back Arrow
         ImageView back_arrow_imageView = (ImageView) findViewById(R.id.backArrow);
         back_arrow_imageView.setOnClickListener(new View.OnClickListener() {
@@ -65,36 +62,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
     // ***************************************************************************************
 
 
-//    /*
-//        Notes:
-//            NEED TO FIX: This might become the sign out!!!!
-//            If incoming intent has the command of going to edit profile, we need to swap the fragment to
-//                show the EditProfileFragment!!
-//     */
-//
-//    private void getIncomingIntent()
-//    {
-//        Intent intent = getIntent();
-//
-//        // Notes: if this intent has an extra, and that extra is the calling activity
-//        if(intent.hasExtra(getString(R.string.calling_activity)))
-//        {
-//            Log.d(TAG, "getIncomingIntent: received incoming intent from " + getString(R.string.profile_activity));
-//            setViewPager(pagerAdapter.getFragmentNumber(getString(R.string.edit_profile_fragment)));
-//        }
-//    }
-
-
     private void setUpFragments()
     {
         // Notes: Order Matters!!!
         pagerAdapter = new SectionStatePagerAdapter(getSupportFragmentManager(), 0);
         // Notes: Fragment #0
         pagerAdapter.addFragment(getString(R.string.edit_profile_fragment), new EditProfileFragment());
-
-//        // Notes: Fragment #1
-//        pagerAdapter.addFragment(getString(R.string.sign_out_fragment), new SignOutFragment());
-
     }
 
     private void setUpSettingsList()
@@ -114,11 +87,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
          */
         // Notes: Fragment #0
         options.add(getString(R.string.edit_profile_fragment));
-
-
-
-        // Notes: Fragment #1
-//        options.add(getString(R.string.sign_out_fragment));
 
         ArrayAdapter adapter = new ArrayAdapter(ACTIVITY_CONTEXT, android.R.layout.simple_list_item_1, options);
         listView.setAdapter(adapter);
