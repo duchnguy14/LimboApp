@@ -153,7 +153,6 @@ public class EditProfileFragment extends Fragment
             }
         }
 
-
         if(description != null)
         {
             // Notes: update description
@@ -218,7 +217,7 @@ public class EditProfileFragment extends Fragment
 
 
     private void setProfileWidgets(User user_param) {
-        Log.d(TAG, "setProfileWidgets: setting widgets with data retrieving from firebase database: " + user_param.toString());
+        Log.d(TAG, "setProfileWidgetsA: setting widgets with data retrieving from firebase database: " + user_param.toString());
 
         mUser = user_param;
 
@@ -263,7 +262,7 @@ public class EditProfileFragment extends Fragment
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getCurrentUser().getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference();
+        myRef = mFirebaseDatabase.getReference("users");
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
