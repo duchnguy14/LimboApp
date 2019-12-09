@@ -90,8 +90,24 @@ public class Video {
         mfirebaseMethods.incrementLikes(key);
     }
 
-    public void deincrementLikes() {
-        likes--;
-        //deincrement in firebase?
+    public void update(Video video) {
+        if(!description.equals(video.getDescription())){
+            setDescription(video.getDescription());
+        }
+        if(!username.equals(video.getUsername())){
+            setUsername(video.getUsername());
+        }
+        if(!path.equals(video.getPath())){
+            setPath(video.getPath());
+        }
+        if(!iconUrl.equals(video.getIconUrl())){
+            setIconUrl(video.getIconUrl());
+        }
+        if(!uid.equals(video.getUid())){
+            setUid(video.getUid());
+        }
+        if(likes != video.getLikes()){
+            setLikes(video.getLikes());
+        }
     }
 }

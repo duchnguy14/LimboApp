@@ -24,6 +24,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecyclerViewAdapter.ViewHolder> {
 
@@ -46,13 +47,59 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange: reached");
-                videos.clear();
-                for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
-                    videos.add(databaseVideo.getValue(Video.class));
-                    Log.d(TAG, "onDataChange: latest video path: " + videos.get(videos.size()-1).getPath());
-                    Log.d(TAG, "onDataChange: video likes = " + videos.get(videos.size()-1).getLikes());
+                //if no videos exist yet
+                if(videos.isEmpty()){
+                    Log.d(TAG, "onDataChange: video list empty");
+                    for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
+                        videos.add(databaseVideo.getValue(Video.class));
+                        Log.d(TAG, "onDataChange: latest video path: " + videos.get(videos.size() - 1).getPath());
+                        Log.d(TAG, "onDataChange: video likes = " + videos.get(videos.size() - 1).getLikes());
+                    }
+                    notifyDataSetChanged();
                 }
-                notifyDataSetChanged();
+                else {
+                    //if a video is added or changed
+                    for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
+                        Log.d(TAG, "onDataChange: start of one child");
+                        Log.d(TAG, "onDataChange: key = " + databaseVideo.getKey());
+                        boolean exists = false;
+                        for (Video currentVideo: videos) {
+                            Log.d(TAG, "onDataChange: first key = " + currentVideo.getKey());
+                            if(currentVideo.getKey().equals(databaseVideo.getKey())) {
+                                Log.d(TAG, "onDataChange: found a matching existing video");
+                                exists = true;
+                                Video tempVideo = databaseVideo.getValue(Video.class);
+                                currentVideo.update(tempVideo);
+                                notifyItemChanged(videos.indexOf(currentVideo),"data_update");
+                                break;
+                            }
+                        }
+                        if(!exists) {
+                            Log.d(TAG, "onDataChange: this video didn't exist");
+                            Log.d(TAG, "onDataChange: key = " + databaseVideo.getKey());
+                            videos.add(databaseVideo.getValue(Video.class));
+                            Log.d(TAG, "onDataChange: latest video path: " + videos.get(videos.size() - 1).getPath());
+                            Log.d(TAG, "onDataChange: video likes = " + videos.get(videos.size() - 1).getLikes());
+                            notifyItemInserted(videos.size()-1);
+                        }
+                        Log.d(TAG, "onDataChange: this child is finished");
+                    }
+
+                    //if a video is removed
+                    for (Video currentVideo: videos) {
+                        boolean exists = false;
+                        for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
+                            if(currentVideo.getKey().equals(databaseVideo.getKey())) {
+                                exists = true;
+                                break;
+                            }
+                        }
+                        if(!exists){
+                            notifyItemRemoved(videos.indexOf(currentVideo));
+                        }
+                    }
+                }
+                Log.d(TAG, "onDataChange: Finished");
             }
 
             @Override
@@ -108,6 +155,20 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
                 videos.get(position).incrementLikes(context);
             }
         });
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if(!payloads.isEmpty()) {
+            holder.username.setText(videos.get(position).getUsername());
+            holder.description.setText(videos.get(position).getDescription());
+            holder.likeCount.setText(String.valueOf(videos.get(position).getLikes()));
+            Log.d(TAG, "onBindViewHolder: icon = " + videos.get(position).getIconUrl());
+            Glide.with(context).load(videos.get(position).getIconUrl()).into(holder.icon);
+        }
+        else{
+            onBindViewHolder(holder,position);
+        }
     }
 
     @Override
