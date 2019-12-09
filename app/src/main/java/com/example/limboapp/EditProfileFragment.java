@@ -276,7 +276,6 @@ public class EditProfileFragment extends Fragment
     public void onStart()
     {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
 
         // Notes: For whatever reason we start this activity, it always checks the user.
         FirebaseUser user = mAuth.getCurrentUser();
@@ -285,9 +284,5 @@ public class EditProfileFragment extends Fragment
     @Override
     public void onStop() {
         super.onStop();
-        if(mAuthListener != null)
-        {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
     }
 }
