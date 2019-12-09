@@ -182,7 +182,7 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
                             }
                         });
                         //add to user object
-                        User newUser = new User(username, iconUrl, "", username, 0L, 0L, 0L, mAuth.getCurrentUser().getUid());
+                        User newUser = new User(username, iconUrl, "Hi! I'm new here!", username, 0L, 0L, 0L, mAuth.getCurrentUser().getUid());
 
                         Log.d(TAG, "onDataChange: newUser = " + newUser.toString());
 

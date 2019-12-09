@@ -1,5 +1,6 @@
 package com.example.limboapp;
 
+import android.content.Context;
 import android.util.Log;
 
 public class Video {
@@ -84,9 +85,9 @@ public class Video {
 
     public void setLikes(int likes) { this.likes = likes; }
 
-    public void incrementLikes() {
-        likes++;
-        //deincrement in firebase?
+    public void incrementLikes(Context context) {
+        FirebaseMethods mfirebaseMethods = new FirebaseMethods(context);
+        mfirebaseMethods.incrementLikes(key);
     }
 
     public void deincrementLikes() {

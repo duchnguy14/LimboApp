@@ -182,27 +182,29 @@ public class EditProfileFragment extends Fragment
                 .orderByChild(getString(R.string.field_username))
                 .equalTo(username);
 
-
         query.addListenerForSingleValueEvent(new ValueEventListener()
         {
             // Notes: Returns a datasnapshot if a match is found
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if(dataSnapshot.exists() == false){
-                    //Notes: add the username if not found
-                    mFirebaseMethods.updateUsername(username);
-                    Toast.makeText(getActivity(), " saved username.", Toast.LENGTH_SHORT).show();
-
-                }
+                boolean found = false;
                 // Notes: singleSnapshot is a single item from database
                 for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
                     if (singleSnapshot.exists() == true)
                     {
                         Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH: " + singleSnapshot.getValue(User.class).getUsername());
-                        Toast.makeText(getActivity(), "That username already exists.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "That username already exists.", Toast.LENGTH_LONG).show();
+                        found = true;
                     }
+                }
+                if(dataSnapshot.exists() == false){
+                    //Notes: add the username if not found
+                    mFirebaseMethods.updateUsername(username);
+                }
+                if(!found) {
+                    Toast.makeText(getActivity(),"Your changes have been saved",Toast.LENGTH_LONG).show();
+                    getActivity().finish();
                 }
             }
 

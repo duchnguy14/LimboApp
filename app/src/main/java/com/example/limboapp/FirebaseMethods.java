@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class FirebaseMethods
@@ -144,7 +145,41 @@ public class FirebaseMethods
 
     }
 
+    public void incrementLikes(final String key)
+    {
+        Log.d(TAG, "addPost: incrementing post inside the users database!");
 
+        myRef = myRef.child("videos").child(key);
+
+        // Read from the database
+        myRef.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                Video currentVideo = dataSnapshot.getValue(Video.class);
+
+                int likes = currentVideo.getLikes();
+
+                Log.d(TAG, "onDataChange: likes = " + likes);
+
+                likes++;
+
+                Log.d(TAG, "onDataChange: (Incremented) likes num = " + likes);
+
+                myRef.child("likes").setValue(likes);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+
+    }
 
 
 

@@ -46,9 +46,11 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange: reached");
+                videos.clear();
                 for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
                     videos.add(databaseVideo.getValue(Video.class));
                     Log.d(TAG, "onDataChange: latest video path: " + videos.get(videos.size()-1).getPath());
+                    Log.d(TAG, "onDataChange: video likes = " + videos.get(videos.size()-1).getLikes());
                 }
                 notifyDataSetChanged();
             }
@@ -69,13 +71,14 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         holder.username.setText(videos.get(position).getUsername());
         holder.description.setText(videos.get(position).getDescription());
+        holder.likeCount.setText(String.valueOf(videos.get(position).getLikes()));
         Log.d(TAG, "onBindViewHolder: icon = " + videos.get(position).getIconUrl());
         Glide.with(context).load(videos.get(position).getIconUrl()).into(holder.icon);
-        Uri videoUri = Uri.parse(videos.get(position).getPath());
+        final Uri videoUri = Uri.parse(videos.get(position).getPath());
         holder.video.setVideoURI(videoUri);
 
         holder.video.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -98,6 +101,13 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
                 }
             }
         });
+
+        holder.like_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                videos.get(position).incrementLikes(context);
+            }
+        });
     }
 
     @Override
@@ -107,7 +117,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View view;
-        public TextView username, description;
+        public TextView username, description, likeCount;
         public ImageView icon;
         public ImageView like_button;
         public VideoView video;
@@ -118,6 +128,7 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
             this.view = view;
             username = view.findViewById(R.id.user_post_username_textView);
             description = view.findViewById(R.id.user_post_description);
+            likeCount = view.findViewById(R.id.user_post_likeCount);
             icon = view.findViewById(R.id.user_icon);
             like_button = view.findViewById(R.id.like_button);
             video = view.findViewById(R.id.user_post_VideoView);

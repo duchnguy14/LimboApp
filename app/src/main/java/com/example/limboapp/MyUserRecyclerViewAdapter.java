@@ -43,6 +43,7 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange: reached");
+                videos.clear();
                 for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
                     videos.add(databaseVideo.getValue(Video.class));
                 }
