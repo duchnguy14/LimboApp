@@ -105,12 +105,32 @@ public class EditProfileFragment extends Fragment
     private void saveProfileSettings()
     {
         // Notes: Fields from XML
-        final String displayName = mDisplayName.getText().toString();
-        final String username = mUsername.getText().toString();
-        final String description = mDescription.getText().toString();
+//        final String displayName = mDisplayName.getText().toString();
+//        final String username = mUsername.getText().toString();
+//        final String description = mDescription.getText().toString();
+
+        String displayName = null;
+        String username = null;
+        String description = null;
 
 
-        if(username.length() != 0)
+        if(mDisplayName.getText().toString().length() != 0)
+        {
+            displayName = mDisplayName.getText().toString();
+        }
+
+        if(mUsername.getText().toString().length() != 0)
+        {
+            username = mUsername.getText().toString();
+        }
+
+        if(mDescription.getText().toString().length() != 0)
+        {
+            description = mDescription.getText().toString();
+        }
+
+
+        if(username != null)
         {
             // Notes: case1 - User made a change to their username
             if(!mUser.getUsername().equals(username))
@@ -119,14 +139,13 @@ public class EditProfileFragment extends Fragment
             }
         }
 
-
         /*
             Notes: Case 2 & 3
                 changing the rest of the settings that do not require uniqueness
          */
 
         // Notes: update displayname
-        if(displayName.length() != 0)
+        if(displayName != null)
         {
             if(!mUser.getDisplay_name().equals(displayName))
             {
@@ -135,7 +154,7 @@ public class EditProfileFragment extends Fragment
         }
 
 
-        if(description.length() != 0)
+        if(description != null)
         {
             // Notes: update description
             if(!mUser.getDescription().equals(description))
