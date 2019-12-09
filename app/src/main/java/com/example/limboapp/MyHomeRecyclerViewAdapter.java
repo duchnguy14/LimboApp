@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.example.limboapp.HomeFragment.OnListFragmentInteractionListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -46,27 +44,19 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
         q.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange: reached");
                 //if no videos exist yet
                 if(videos.isEmpty()){
-                    Log.d(TAG, "onDataChange: video list empty");
                     for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
                         videos.add(databaseVideo.getValue(Video.class));
-                        Log.d(TAG, "onDataChange: latest video path: " + videos.get(videos.size() - 1).getPath());
-                        Log.d(TAG, "onDataChange: video likes = " + videos.get(videos.size() - 1).getLikes());
                     }
                     notifyDataSetChanged();
                 }
                 else {
                     //if a video is added or changed
                     for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
-                        Log.d(TAG, "onDataChange: start of one child");
-                        Log.d(TAG, "onDataChange: key = " + databaseVideo.getKey());
                         boolean exists = false;
                         for (Video currentVideo: videos) {
-                            Log.d(TAG, "onDataChange: first key = " + currentVideo.getKey());
                             if(currentVideo.getKey().equals(databaseVideo.getKey())) {
-                                Log.d(TAG, "onDataChange: found a matching existing video");
                                 exists = true;
                                 Video tempVideo = databaseVideo.getValue(Video.class);
                                 currentVideo.update(tempVideo);
@@ -75,14 +65,9 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
                             }
                         }
                         if(!exists) {
-                            Log.d(TAG, "onDataChange: this video didn't exist");
-                            Log.d(TAG, "onDataChange: key = " + databaseVideo.getKey());
                             videos.add(databaseVideo.getValue(Video.class));
-                            Log.d(TAG, "onDataChange: latest video path: " + videos.get(videos.size() - 1).getPath());
-                            Log.d(TAG, "onDataChange: video likes = " + videos.get(videos.size() - 1).getLikes());
                             notifyItemInserted(videos.size()-1);
                         }
-                        Log.d(TAG, "onDataChange: this child is finished");
                     }
 
                     //if a video is removed
@@ -99,12 +84,10 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
                         }
                     }
                 }
-                Log.d(TAG, "onDataChange: Finished");
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG, "onCancelled: database error: " + databaseError);
             }
         });
     }
@@ -123,7 +106,6 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
         holder.username.setText(videos.get(position).getUsername());
         holder.description.setText(videos.get(position).getDescription());
         holder.likeCount.setText(String.valueOf(videos.get(position).getLikes()));
-        Log.d(TAG, "onBindViewHolder: icon = " + videos.get(position).getIconUrl());
         Glide.with(context).load(videos.get(position).getIconUrl()).into(holder.icon);
         final Uri videoUri = Uri.parse(videos.get(position).getPath());
         holder.video.setVideoURI(videoUri);
@@ -163,7 +145,6 @@ public class MyHomeRecyclerViewAdapter extends RecyclerView.Adapter<MyHomeRecycl
             holder.username.setText(videos.get(position).getUsername());
             holder.description.setText(videos.get(position).getDescription());
             holder.likeCount.setText(String.valueOf(videos.get(position).getLikes()));
-            Log.d(TAG, "onBindViewHolder: icon = " + videos.get(position).getIconUrl());
             Glide.with(context).load(videos.get(position).getIconUrl()).into(holder.icon);
         }
         else{

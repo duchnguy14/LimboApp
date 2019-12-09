@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom|center"
-    android:orientation="vertical"
-    tools:context=".share.RecordFragment">
+    android:orientation="vertical">
 
     <SurfaceView
         android:id="@+id/videoview"
@@ -15,17 +14,17 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="3">
 
         <ImageView
             android:id="@+id/bt2"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_weight="1"
             android:src="@drawable/ic_reverse" />
@@ -47,7 +46,6 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:layout_gravity="bottom"
             android:layout_margin="@dimen/activity_horizontal_margin"
             android:layout_weight="1"
             android:src="@drawable/ic_flash_off"

@@ -1,7 +1,6 @@
 package com.example.limboapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfileFragment extends Fragment
 {
-
     // Notes: Debug Tools
     static final String TAG = "(Debug) EditProfileFragment";
 
@@ -64,30 +62,24 @@ public class EditProfileFragment extends Fragment
 
         setupFirebaseAuth();
 
-
         // Notes: Back Arrow for navigating back to ProfileActivity
         ImageView back_arrow = (ImageView) view.findViewById(R.id.backArrow);
         back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick: Navigating back to ProfileActivity");
                 // Notes: we are in a fragment that's why we need getActivity()
                 getActivity().finish();
             }
         });
-
 
         // Notes: Save changes that are made in the settings
         ImageView checkmark = (ImageView) view.findViewById(R.id.saveChanges);
         checkmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: attempting to save changes.");
                 saveProfileSettings();
             }
         });
-
-
 
         return view;
     }
@@ -163,7 +155,6 @@ public class EditProfileFragment extends Fragment
         }
     }
 
-
     /*
         Notes:
             Checks if username already exists in database.
@@ -171,7 +162,6 @@ public class EditProfileFragment extends Fragment
 
      */
     private void checkIfUsernameExists(final String username) {
-        Log.d(TAG, "checkIfUsernameExists: Checking if  " + username + " already exists.");
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
@@ -193,7 +183,6 @@ public class EditProfileFragment extends Fragment
                 for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
                     if (singleSnapshot.exists() == true)
                     {
-                        Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH: " + singleSnapshot.getValue(User.class).getUsername());
                         Toast.makeText(getActivity(), "That username already exists.", Toast.LENGTH_LONG).show();
                         found = true;
                     }
@@ -215,11 +204,7 @@ public class EditProfileFragment extends Fragment
         });
     }
 
-
-
-
     private void setProfileWidgets(User user_param) {
-        Log.d(TAG, "setProfileWidgetsA: setting widgets with data retrieving from firebase database: " + user_param.toString());
 
         mUser = user_param;
 
@@ -243,7 +228,6 @@ public class EditProfileFragment extends Fragment
         }
     }
 
-
     // ***************************************************************************************
     // *********************************NOTES: FIREBASE METHODS*********************************
     // ***************************************************************************************
@@ -254,7 +238,6 @@ public class EditProfileFragment extends Fragment
     */
     private void setupFirebaseAuth()
     {
-        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth");
 
         /* Notes:
             Initialize Firebase Auth.
@@ -265,27 +248,6 @@ public class EditProfileFragment extends Fragment
         userID = mAuth.getCurrentUser().getUid();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference("users");
-
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-
-
-                if(user != null)
-                {
-                    // Notes: User is signed in
-                    Log.d(TAG, "\tsetupFirebaseAuth() > onAuthStateChanged: signed in: " + user.getUid());
-                }
-                else
-                {
-                    // Notes: User is signved out
-                    Log.d(TAG, "\tsetupFirebaseAuth() > onAuthStateChanged: signed out");
-                }
-            }
-        };
-
 
         /* ◊
             Notes:
@@ -308,22 +270,17 @@ public class EditProfileFragment extends Fragment
 
             }
         });
-
-
     }
-
 
     @Override
     public void onStart()
     {
-        Log.d(TAG, "onStart: ");
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
 
         // Notes: For whatever reason we start this activity, it always checks the user.
         FirebaseUser user = mAuth.getCurrentUser();
     }
-
 
     @Override
     public void onStop() {
@@ -333,6 +290,4 @@ public class EditProfileFragment extends Fragment
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-
 }

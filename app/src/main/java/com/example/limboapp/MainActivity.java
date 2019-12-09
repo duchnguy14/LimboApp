@@ -99,15 +99,9 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-
-
     private void initImageLoader()
     {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(getApplicationContext());
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
-
-
-
-
 }

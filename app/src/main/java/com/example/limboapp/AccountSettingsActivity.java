@@ -34,7 +34,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate: started");
 
-
         relativeLayout = (RelativeLayout) findViewById(R.id.relLayout1);
         viewPager = (ViewPager) findViewById(R.id.container);
 
@@ -72,9 +71,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     private void setUpSettingsList()
     {
-        Log.i(TAG, "setUpSettingList - Initializing Account Settings list");
         ListView listView = (ListView) findViewById(R.id.lvAccountSettings);
-
 
         ArrayList<String> options = new ArrayList<String>();
 
@@ -95,7 +92,6 @@ public class AccountSettingsActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i(TAG, "onItemClick: navigating to fragment #: " + position);
                 setViewPager(position);
             }
         });
@@ -110,21 +106,12 @@ public class AccountSettingsActivity extends AppCompatActivity {
         //          goes away and only the fragment is displayed.
         relativeLayout.setVisibility(View.GONE);
 
-        Log.i(TAG, "setViewPager: navigating to fragment #: " + fragment_number);
-
         viewPager.setAdapter(pagerAdapter);
 
         // Notes: Navigates to whichever fragment
         viewPager.setCurrentItem(fragment_number);
 
-
         // Notes: To set the fragment, it will depends on which item we click on
         //          in the listview (setUpSettingsList)
-
     }
-
-
-
-
-
 }

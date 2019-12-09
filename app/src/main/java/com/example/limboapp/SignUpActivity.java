@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,7 +47,6 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
@@ -69,19 +67,14 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
     @Override
     public void onClick(View v) 
     {
-        Log.d(TAG, "onClick: go to main");
-
         //get new user information
         username = inputUsername.getText().toString();
 
-
         checkIfUsernameExists(username);
-
     }
 
     public void goToMain() {
         intent = new Intent(getApplicationContext(), MainActivity.class);
-
 
         startActivity(intent);
 
@@ -96,7 +89,6 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        Log.d(TAG, TAG + ": current username input = " + s.toString());
         checkUsername(s.toString());
     }
 
@@ -115,15 +107,12 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
         }
         //if username already exists
 
-        Log.d(TAG, "checkUsername: error = " + errorMessage);
 
         if (errorMessage.equals("")){
-            Log.d(TAG, "checkUsername: empty error message. no error.");
             inputUsername.setError(null);
             return true;
         }
         else {
-            Log.d(TAG, "checkUsername: username is invalid");
             inputUsername.setError(errorMessage);
             return false;
         }
@@ -138,7 +127,6 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
      */
     private void checkIfUsernameExists(final String username) {
 
-        Log.d(TAG, "checkIfUsernameExists: Checking if  " + username + " already exists.");
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
@@ -175,16 +163,13 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
-                                    Log.d(TAG, "profile update successful");
                                 } else {
-                                    Log.d(TAG, "profile update unsuccessful: " + task.getException());
                                 }
                             }
                         });
                         //add to user object
                         User newUser = new User(username, iconUrl, "Hi! I'm new here!", username, 0L, 0L, 0L, mAuth.getCurrentUser().getUid());
 
-                        Log.d(TAG, "onDataChange: newUser = " + newUser.toString());
 
                         //put new user data in database by UID
                         usersRef = FirebaseDatabase.getInstance().getReference().child("users");
@@ -195,10 +180,9 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         //go to main upon confirming success
-                                        Log.d(TAG, "successfully added new user to database");
                                         goToMain();
                                     } else {
-                                        Log.d(TAG, "error adding new user to database: " + task.getException());
+                                        //login unsuccessful
                                     }
                                 }
                            });
@@ -212,7 +196,7 @@ public class SignUpActivity extends AppCompatActivity implements Button.OnClickL
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    //could not access usernames
                 }
             });
         }

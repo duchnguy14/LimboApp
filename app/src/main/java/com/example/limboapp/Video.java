@@ -1,7 +1,6 @@
 package com.example.limboapp;
 
 import android.content.Context;
-import android.util.Log;
 
 public class Video {
     private String key;
@@ -17,40 +16,15 @@ public class Video {
 
     }
 
-//    public Video(String key, String description, String path, String username, String iconUrl, int likes) {
-//        this.key = key;
-//        this.description = description;
-//        this.path = path;
-//        this.username = username;
-//        this.iconUrl = iconUrl;
-//        this.likes = likes;
-//
-//        Log.d("Video", "Video data:\nkey = " + key
-//            + "\ndescription = " + description
-//            + "\npath = " + path
-//            + "\nusername = " + username
-//            + "\niconUrl = " + iconUrl
-//            + "\nlikes" + likes
-//        );
-//    }
 
-
-    public Video(String description, String path, String username, String iconUrl, String uid, int likes) {
+    public Video(String key, String description, String path, String username, String iconUrl, String uid, int likes) {
+        this.key = key;
         this.description = description;
         this.path = path;
         this.username = username;
         this.iconUrl = iconUrl;
         this.uid = uid;
         this.likes = likes;
-
-
-        Log.d("Video", "Video data:\nkey = " + key
-                + "\ndescription = " + description
-                + "\npath = " + path
-                + "\nusername = " + username
-                + "\niconUrl = " + iconUrl
-                + "\nlikes" + likes
-        );
     }
 
     public String getKey() { return key; }

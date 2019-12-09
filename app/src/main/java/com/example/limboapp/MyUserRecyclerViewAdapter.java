@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +35,11 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
 
         //Queries for user videos to add to list
         // (not too efficient, dangerous if there is a massive amount of videos)
-        Log.d(TAG, "MyUserRecyclerViewAdapter: username = " + mAuth.getCurrentUser().getDisplayName());
         Query videoQuery = FirebaseDatabase.getInstance().getReference().child("videos")
                 .orderByChild("username").equalTo(mAuth.getCurrentUser().getDisplayName());
         videoQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange: reached");
                 videos.clear();
                 for (DataSnapshot databaseVideo: dataSnapshot.getChildren()) {
                     videos.add(databaseVideo.getValue(Video.class));
@@ -52,7 +49,7 @@ public class MyUserRecyclerViewAdapter extends RecyclerView.Adapter<MyUserRecycl
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG, "onCancelled: database error: " + databaseError);
+                //video couldnt be retrieved
             }
         });
     }

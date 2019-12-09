@@ -2,7 +2,6 @@ package com.example.limboapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -13,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,7 +25,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -53,9 +50,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     private boolean newUser = false;
 
     SignInButton signInButtonGoogle;
-    TwitterLoginButton signInButtonTwitter;
-    LoginButton signInButtonFacebook;
-
 
 
     // ***************************************************************************************
@@ -65,14 +59,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Log.i("DEBUG:", "Inside of LogInActivity");
         super.onCreate(savedInstanceState);
-
-
-
-
-
-
 
         // Configure Google sign-in to request the user's ID, email address, and basic profile.
         // ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -115,14 +102,9 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         AppEventsLogger.activateApp(this.getApplication());
     }
 
-
-
     // ***************************************************************************************
     // *********************************NOTES: HELPER METHOD *********************************
     // ***************************************************************************************
-
-
-
 
     public void goToMain(View view)
     {
@@ -138,7 +120,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
     }
 
-
     @Override
     protected void onStart()
     {
@@ -148,8 +129,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         updateUI(account);
         super.onStart();
     }
-
-
 
     // ***************************************************************************************
     // *********************************NOTES: FIREBASE METHOD *********************************
@@ -161,7 +140,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             if(newUser) {
                 // if this is the first time the user is using the app, send them to sign up activity
                 goToSignUp(findViewById(android.R.id.content).getRootView());
-                Log.d(TAG, "updateUI: NEW USER ALERT...need to sign up");
             }
             else {
                 // else, take user to main activity
@@ -213,13 +191,11 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
             }
         }
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
@@ -228,13 +204,11 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             newUser = task.getResult().getAdditionalUserInfo().isNewUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
                             // Put Toast Message Here
                             sendToast("Sign In with Google Failed");
                             updateUI(null);

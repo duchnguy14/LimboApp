@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.hardware.Camera;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -73,12 +71,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     FirebaseAuth mAuth;
     FirebaseMethods mFirebaseMethods;
 
-
-
-
     public RecordFragment() {
-
-
     }
 
     /**
@@ -94,13 +87,10 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         fragment.setArguments(args);
         File file = new File(Environment.DIRECTORY_PICTURES,"Limbo");
         if(!file.exists()){
-            Log.d("DEBUG", "newInstance: mkdirs");
             file.mkdirs();
         }
 
-
         return fragment;
-
     }
 
     @Override
@@ -124,18 +114,13 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
         mAuth = FirebaseAuth.getInstance();
         mFirebaseMethods = new FirebaseMethods(getContext());
 
-
-
         if(ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ) {
-            Log.d("PAIGE", "onCreateView: HI");
             ActivityCompat.requestPermissions(getActivity(),
                     new String[] {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE} , CAMERA_REQUEST_CODE);
         } else {
             mSurfaceHolder.addCallback(this);
             mSurfaceHolder.setFormat(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
-
-
 
        aSwitch.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -162,17 +147,10 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             }
         });
 
-
-
-
-
-
-
-
         return view;
     }
 
-    public  void on() {
+    public void on() {
 
         if(isFlashOn == true) {
             Toast.makeText(getContext(), "Flash is ON", LENGTH_SHORT).show();
@@ -182,11 +160,9 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
             camera.setParameters(parameters);
             isFlashOn = true;
-
         }
     }
     public void off(){
-
         if(isFlashOn == false) {
             Toast.makeText(getContext(), "Flash is OFF", LENGTH_SHORT).show();
         } else{
@@ -195,10 +171,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
             camera.setParameters(parameters);
             isFlashOn = false;
-
         }
-
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -235,15 +208,12 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
           parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);
           camera.setParameters(parameters);
 
-
         try {
             camera.setPreviewDisplay(surfaceHolder);
         } catch (IOException e) {
             e.printStackTrace();
         }
         camera.startPreview();
-
-
     }
 
     @Override
@@ -254,10 +224,7 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         camera.stopPreview();
         camera.release();
-
     }
-
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -330,9 +297,9 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Toast.makeText(getActivity(),"Please wait...",Toast.LENGTH_LONG).show();
         if(resultCode == RESULT_OK){
             Uri videoUri = data.getData();
-            Log.d("PAIGE", "onActivityResult: uri = " + videoUri.getPath());
             File videoFile =  new File(getPath(videoUri));
             Uri file = Uri.fromFile(videoFile);
             final StorageReference videoRef = FirebaseStorage.getInstance().getReference()
@@ -342,7 +309,6 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.d("PAIGE", "onFailure: upload error: " + e);
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -355,25 +321,26 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
                         @Override
                         public void onSuccess(Uri uri) {
                             String videoReference = uri.toString();
-                            Log.d("PAIGE", "onSuccess: videoReference = " + videoReference);
-                            Video video = new Video("My first video upload!",
+                            int parseToken = videoReference.lastIndexOf('=');
+                            String token = videoReference.substring(parseToken+1);
+                            Video video = new Video(token,
+                                    "My first video upload!",
                                     videoReference,
                                     mAuth.getCurrentUser().getDisplayName(),
                                     mAuth.getCurrentUser().getPhotoUrl().toString().replace("s96-c", "s400-c"),
                                     mAuth.getCurrentUser().getUid(),0);
                             DatabaseReference videoDataRef = FirebaseDatabase.getInstance().getReference().child("videos");
 
-                            videoDataRef.push().setValue(video).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            videoDataRef.child(token).setValue(video).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(getContext(), "Your video has been uploaded!", Toast.LENGTH_LONG).show();
-                                        Log.d(TAG, "onComplete: calling incrememnt post!");
                                         // Update posts
                                         mFirebaseMethods.incrementPost();
 
                                     } else {
-                                        Log.d("PAIGE", "error adding new video to database: " + task.getException());
+                                        //failed to add to database
                                     }
                                 }
                             });
@@ -395,7 +362,6 @@ public class RecordFragment extends Fragment implements SurfaceHolder.Callback{
             result = cursor.getString(idx);
             cursor.close();
         }
-        Log.d("PAIGE", "getPath: result = " + result);
         return result;
     }
 }

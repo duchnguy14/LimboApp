@@ -23,12 +23,9 @@ public class UniversalImageLoader
 
     static final String TAG = "(Debug) UniversalImageLoader";
 
-
     public UniversalImageLoader(Context context) {
         this.ACTIVITY_CONTEXT = context;
     }
-
-
     /*
         Notes: This is where we are going to set all the settings
                     for the Universal Image Loader because it works
